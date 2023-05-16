@@ -1,6 +1,6 @@
 package se.ifmo.lab07.command;
 
-import se.ifmo.lab07.Client;
+import se.ifmo.lab07.network.Client;
 import se.ifmo.lab07.exception.ExitException;
 import se.ifmo.lab07.exception.InvalidArgsException;
 import se.ifmo.lab07.util.IOProvider;

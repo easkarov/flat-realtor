@@ -1,6 +1,6 @@
 package se.ifmo.lab07.parser;
 
-import se.ifmo.lab07.Client;
+import se.ifmo.lab07.network.Client;
 import se.ifmo.lab07.dto.request.GetCommandsRequest;
 import se.ifmo.lab07.dto.response.GetCommandsResponse;
 import se.ifmo.lab07.manager.CommandManager;

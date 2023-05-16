@@ -1,6 +1,7 @@
 package se.ifmo.lab07;
 
 import se.ifmo.lab07.manager.CommandManager;
+import se.ifmo.lab07.network.Client;
 import se.ifmo.lab07.parser.CommandParser;
 import se.ifmo.lab07.util.CLIPrinter;
 import se.ifmo.lab07.util.IOProvider;

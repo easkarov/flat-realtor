@@ -34,10 +34,6 @@ public class UpdateCommand extends Command {
         validateArgs(request.args());
 
         long flatId = Long.parseLong(request.args()[0]);
-        Flat flat = collection.get(flatId);
-        if (flat == null) {
-            return new CommandResponse("Flat with specified ID doesn't exist.", StatusCode.ERROR);
-        }
 
         var builder = new StringBuilder();
         Flat newFlat = request.model();

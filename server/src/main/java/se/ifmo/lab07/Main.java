@@ -2,6 +2,7 @@ package se.ifmo.lab07;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.ifmo.lab07.manager.AuthManager;
 import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.manager.CommandManager;
 import se.ifmo.lab07.network.Server;
@@ -23,7 +24,7 @@ public class Main {
             Properties props = new Properties();
             props.load(stream);
             var filename = props.getProperty("FILENAME");
-            var port = Integer.parseInt(props.getProperty("PORT"));
+            var port = Integer.parseInt(args[0]);
 
             Scanner scanner = new Scanner(System.in);
             Printer printer = new CLIPrinter();
@@ -31,8 +32,10 @@ public class Main {
 
             CollectionManager collectionManager = CollectionManager.fromFile(filename);
             CommandManager commandManager = new CommandManager(collectionManager, provider);
+            AuthManager authManager = new AuthManager();
 
-            try (var server = new Server(commandManager, port)) {
+            try (var server = new Server(commandManager, authManager, port)) {
+                authManager.startClearing();
                 server.run();
             }
         } catch (FileNotFoundException e) {

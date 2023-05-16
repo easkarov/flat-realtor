@@ -1,4 +1,4 @@
-package se.ifmo.lab07;
+package se.ifmo.lab07.network;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

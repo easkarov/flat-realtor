@@ -8,6 +8,7 @@ import se.ifmo.lab07.dto.request.PingRequest;
 import se.ifmo.lab07.dto.request.ValidationRequest;
 import se.ifmo.lab07.dto.response.GetCommandsResponse;
 import se.ifmo.lab07.dto.response.PingResponse;
+import se.ifmo.lab07.manager.AuthManager;
 import se.ifmo.lab07.manager.CommandManager;
 import se.ifmo.lab07.manager.ReceivingManager;
 import se.ifmo.lab07.manager.SendingManager;
@@ -15,6 +16,7 @@ import se.ifmo.lab07.manager.SendingManager;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.util.Random;
 
 
 public class Server implements AutoCloseable {
@@ -25,12 +27,14 @@ public class Server implements AutoCloseable {
     private final CommandManager commandManager;
     private final ReceivingManager receivingManager;
     private final SendingManager sendingManager;
+    private final AuthManager authManager;
 
-    public Server(CommandManager commandManager, int port) throws SocketException {
+    public Server(CommandManager commandManager, AuthManager authManager, int port) throws SocketException {
         this.connection = new DatagramSocket(port);
         this.commandManager = commandManager;
         this.receivingManager = new ReceivingManager(connection);
         this.sendingManager = new SendingManager(connection);
+        this.authManager = authManager;
         logger.info("Server started on {} port", port);
     }
 
@@ -50,6 +54,12 @@ public class Server implements AutoCloseable {
                 if (request instanceof GetCommandsRequest) {
                     sendingManager.send(address, new GetCommandsResponse(commandManager.getCommands()));
                 }
+
+                var user = Integer.toHexString(new Random().nextInt());
+                var password = Integer.toHexString(new Random().nextInt());
+                authManager.register(user, password);
+                var token = authManager.authorize(user, password);
+                authManager.logout(token);
 
                 if (request instanceof CommandRequest commandRequest) {
                     sendingManager.send(address, commandManager.execute(commandRequest));

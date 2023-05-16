@@ -1,6 +1,6 @@
 package se.ifmo.lab07.manager;
 
-import se.ifmo.lab07.Client;
+import se.ifmo.lab07.network.Client;
 import se.ifmo.lab07.command.Command;
 import se.ifmo.lab07.command.ExecuteScriptCommand;
 import se.ifmo.lab07.command.ExitCommand;
