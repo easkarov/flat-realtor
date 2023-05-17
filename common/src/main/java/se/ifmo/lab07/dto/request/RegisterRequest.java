@@ -1,4 +1,4 @@
 package se.ifmo.lab07.dto.request;
 
-public final class RegisterRequest implements Request {
+public record RegisterRequest(String username, String password) implements Request {
 }

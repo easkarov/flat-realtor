@@ -19,8 +19,9 @@ import java.util.Map;
 public class CommandManager {
     private final Map<String, Command> commands = new HashMap<>();
     private final CollectionManager collectionManager;
+    private final AuthManager authManager;
 
-    public CommandManager(CollectionManager collection, IOProvider provider) {
+    public CommandManager(CollectionManager collection, IOProvider provider, AuthManager authManager) {
         register("info", new InfoCommand(provider, collection));
         register("show", new ShowCommand(provider, collection));
         register("add", new AddCommand(provider, collection));
@@ -33,6 +34,9 @@ public class CommandManager {
         register("remove_all_by_furnish", new RemoveByFurnishCommand(provider, collection));
         register("filter_starts_with_name", new FilterNameCommand(provider, collection));
         register("print_unique_house", new PrintUniqueHouseCommand(provider, collection));
+        register("sign_up", new SignUpCommand(provider, collection, authManager));
+        register("login", new LoginCommand(provider, collection, authManager));
+        this.authManager = authManager;
         this.collectionManager = collection;
     }
 
@@ -56,7 +60,11 @@ public class CommandManager {
         try {
             if (commands.containsKey(request.name())) {
                 collectionManager.update();
-                var response = commands.get(request.name()).execute(request);
+                var command = commands.get(request.name());
+                if (command instanceof Authorized) {
+                    var username = AuthManager.getUsername(request.token());
+                }
+                var response = command.execute(request);
                 collectionManager.dump();
                 return response;
             }

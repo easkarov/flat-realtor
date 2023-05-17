@@ -9,9 +9,9 @@ import java.util.Scanner;
 public class DatabaseManager {
     private static final String URL = "jdbc:postgresql://localhost:5432/lab07";
 
-    private static final String CREATE_SQL = "create.sql";
+    private static final String CREATE_SQL = "sql/create.sql";
 
-    private static final String DROP_SQL = "create.sql";
+    private static final String DROP_SQL = "sql/create.sql";
 
     private static void executeFromFile(String fileName) throws SQLException, IOException {
         var connection = DriverManager.getConnection(URL);

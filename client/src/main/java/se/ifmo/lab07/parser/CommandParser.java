@@ -87,7 +87,11 @@ public class CommandParser extends DefaultParser {
                 if (serverCommand.get().modelRequired()) {
                     commandRequest.setModel(new FlatParser(scanner, printer).parseFlat());
                 }
+                commandRequest.setToken(client.getToken());
                 var commandResponse = (CommandResponse) client.sendAndReceive(commandRequest);
+                if (commandResponse.status() == StatusCode.OK && commandResponse.token() != null) {
+                    client.setToken(commandResponse.token());
+                }
                 printer.print(commandResponse.message());
 
             } catch (InterruptCommandException e) {

@@ -25,6 +25,8 @@ public class Client implements AutoCloseable {
 
     private final InetSocketAddress address;
 
+    private String token;
+
 
     private Client(DatagramChannel connection, InetSocketAddress address) {
         this.connection = connection;
@@ -37,6 +39,14 @@ public class Client implements AutoCloseable {
         return new Client(dc, new InetSocketAddress(host, port));
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
     public void send(byte[] data) throws IOException {
         int n = (int) Math.ceil((double) data.length / (BATCH - 1));
         for (int i = 0; i < n; i++) {
@@ -45,7 +55,6 @@ public class Client implements AutoCloseable {
 
             batch[BATCH - 1] = (byte) ((i + 1 == n) ? 1 : 0);
             connection.send(ByteBuffer.wrap(batch), address);
-//            logger.info("Batch {}/{} has been sent", i + 1, n);
         }
     }
 
@@ -54,7 +63,6 @@ public class Client implements AutoCloseable {
         var objectStream = new ObjectOutputStream(byteStream);
         objectStream.writeObject(request);
         send(byteStream.toByteArray());
-//        logger.info("Request <{}> sent to {}", request, address);
     }
 
     public Response receiveResponse() throws IOException, ClassNotFoundException, TimeLimitExceededException {

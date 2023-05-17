@@ -96,8 +96,6 @@ public class AuthManager {
             DecodedJWT jwt = JWT.require(ALGORITHM)
                     .build()
                     .verify(token);
-            System.out.println(jwt.getClaim("exp"));
-            System.out.println(jwt.getClaim("exp").asInstant());
             return jwt.getClaim(claim).as(clazz);
         } catch (JWTVerificationException e) {
             logger.error(e.toString());

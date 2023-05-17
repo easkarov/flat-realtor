@@ -55,12 +55,6 @@ public class Server implements AutoCloseable {
                     sendingManager.send(address, new GetCommandsResponse(commandManager.getCommands()));
                 }
 
-                var user = Integer.toHexString(new Random().nextInt());
-                var password = Integer.toHexString(new Random().nextInt());
-                authManager.register(user, password);
-                var token = authManager.authorize(user, password);
-                authManager.logout(token);
-
                 if (request instanceof CommandRequest commandRequest) {
                     sendingManager.send(address, commandManager.execute(commandRequest));
                 }

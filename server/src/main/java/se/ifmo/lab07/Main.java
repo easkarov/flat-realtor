@@ -6,6 +6,7 @@ import se.ifmo.lab07.manager.AuthManager;
 import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.manager.CommandManager;
 import se.ifmo.lab07.network.Server;
+import se.ifmo.lab07.persistance.DatabaseManager;
 import se.ifmo.lab07.util.CLIPrinter;
 import se.ifmo.lab07.util.IOProvider;
 import se.ifmo.lab07.util.Printer;
@@ -30,10 +31,11 @@ public class Main {
             Printer printer = new CLIPrinter();
             IOProvider provider = new IOProvider(scanner, printer);
 
-            CollectionManager collectionManager = CollectionManager.fromFile(filename);
-            CommandManager commandManager = new CommandManager(collectionManager, provider);
             AuthManager authManager = new AuthManager();
+            CollectionManager collectionManager = CollectionManager.fromFile(filename);
+            CommandManager commandManager = new CommandManager(collectionManager, provider, authManager);
 
+            DatabaseManager.init();
             try (var server = new Server(commandManager, authManager, port)) {
                 authManager.startClearing();
                 server.run();

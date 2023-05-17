@@ -9,14 +9,19 @@ public final class CommandRequest implements Request, Serializable {
     private final String name;
     private final String[] args;
     private Flat model;
+    private String token;
 
-    public CommandRequest(String name, String[] args) {
+    public CommandRequest(String name, String... args) {
         this.name = name;
         this.args = args;
     }
 
     public void setModel(Flat flat) {
         this.model = flat;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public CommandRequest(String name) {
@@ -34,4 +39,6 @@ public final class CommandRequest implements Request, Serializable {
     public Flat model() {
         return model;
     }
+
+    public String token() {return token;}
 }
