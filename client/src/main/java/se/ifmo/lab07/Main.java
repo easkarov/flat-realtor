@@ -16,7 +16,7 @@ public class Main {
     private static final String PROPS = "client.properties";
 
     public static void main(String[] args) {
-            try (var stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(PROPS)) {
+        try (var stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(PROPS)) {
             var props = new Properties();
             props.load(stream);
             var host = props.getProperty("HOST");
@@ -34,8 +34,9 @@ public class Main {
                 parser.run();
             }
         } catch (Exception e) {
-            System.out.printf("Error occurred:\n%s", e.getMessage());
-            System.exit(-1);
+            throw new RuntimeException(e);
+//            System.out.printf("Error occurred:\n%s", e.getMessage());
+//            System.exit(-1);
         }
     }
 }

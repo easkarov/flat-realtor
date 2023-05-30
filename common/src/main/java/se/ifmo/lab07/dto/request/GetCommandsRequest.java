@@ -1,4 +1,4 @@
 package se.ifmo.lab07.dto.request;
 
-public record GetCommandsRequest() implements Request {
+public final class GetCommandsRequest extends Request {
 }

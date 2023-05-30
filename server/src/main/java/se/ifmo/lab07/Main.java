@@ -6,7 +6,6 @@ import se.ifmo.lab07.manager.AuthManager;
 import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.manager.CommandManager;
 import se.ifmo.lab07.network.Server;
-import se.ifmo.lab07.persistance.DatabaseManager;
 import se.ifmo.lab07.util.CLIPrinter;
 import se.ifmo.lab07.util.IOProvider;
 import se.ifmo.lab07.util.Printer;
@@ -25,7 +24,8 @@ public class Main {
             Properties props = new Properties();
             props.load(stream);
             var filename = props.getProperty("FILENAME");
-            var port = Integer.parseInt(args[0]);
+//            var port = Integer.parseInt(args[0]);
+            var port = Integer.parseInt(props.getProperty("PORT"));
 
             Scanner scanner = new Scanner(System.in);
             Printer printer = new CLIPrinter();
@@ -35,7 +35,8 @@ public class Main {
             CollectionManager collectionManager = CollectionManager.fromFile(filename);
             CommandManager commandManager = new CommandManager(collectionManager, provider, authManager);
 
-            DatabaseManager.init();
+//            DatabaseManager.drop();
+//            DatabaseManager.init();
             try (var server = new Server(commandManager, authManager, port)) {
                 authManager.startClearing();
                 server.run();
@@ -43,7 +44,8 @@ public class Main {
         } catch (FileNotFoundException e) {
             logger.error("File not found or access denied (read):\n{}", e.getMessage());
         } catch (Exception e) {
-            logger.error("Error. Something went wrong:\n{}", e.getMessage());
+            throw new RuntimeException(e);
+//            logger.error("Error. Something went wrong:\n{}", e.getMessage());
         }
     }
 }

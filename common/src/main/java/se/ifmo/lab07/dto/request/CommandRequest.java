@@ -5,11 +5,10 @@ import se.ifmo.lab07.model.Flat;
 
 import java.io.Serializable;
 
-public final class CommandRequest implements Request, Serializable {
+public final class CommandRequest extends Request implements Serializable {
     private final String name;
     private final String[] args;
     private Flat model;
-    private String token;
 
     public CommandRequest(String name, String... args) {
         this.name = name;
@@ -18,10 +17,6 @@ public final class CommandRequest implements Request, Serializable {
 
     public void setModel(Flat flat) {
         this.model = flat;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public CommandRequest(String name) {
@@ -39,6 +34,4 @@ public final class CommandRequest implements Request, Serializable {
     public Flat model() {
         return model;
     }
-
-    public String token() {return token;}
 }

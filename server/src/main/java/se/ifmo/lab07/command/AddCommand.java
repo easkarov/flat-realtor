@@ -7,7 +7,7 @@ import se.ifmo.lab07.dto.request.CommandRequest;
 import se.ifmo.lab07.dto.response.CommandResponse;
 import se.ifmo.lab07.dto.response.Response;
 
-public class AddCommand extends Command implements Authorized {
+public class AddCommand extends Command implements Unauthorized {
     public AddCommand(IOProvider provider, CollectionManager collection) {
         super("add", "добавить новый элемент в коллекцию", provider, collection);
         this.requiresModel = true;

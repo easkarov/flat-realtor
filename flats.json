@@ -1,23 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "Emil",
-    "coordinates": {
-      "x": 1,
-      "y": 111.0
-    },
-    "creationDate": "2023-03-09T14:58:53.428316200+03:00[Europe/Moscow]",
-    "area": 222,
-    "numberOfRooms": 5,
-    "furnish": "BAD",
-    "view": "TERRIBLE",
-    "house": {
-      "name": "Emil\u0027s House",
-      "year": 123,
-      "numberOfFlatsOnFloor": 5
-    }
-  },
-  {
     "id": 1223,
     "name": "name",
     "coordinates": {
@@ -53,6 +35,24 @@
       "name": "lbbbbbbbbbbbbbb",
       "year": 234,
       "numberOfFlatsOnFloor": 32
+    }
+  },
+  {
+    "id": 1,
+    "name": "Emil",
+    "coordinates": {
+      "x": 1,
+      "y": 111.0
+    },
+    "creationDate": "2023-03-09T14:58:53.428316200+03:00[Europe/Moscow]",
+    "area": 222,
+    "numberOfRooms": 5,
+    "furnish": "BAD",
+    "view": "TERRIBLE",
+    "house": {
+      "name": "Emil\u0027s House",
+      "year": 123,
+      "numberOfFlatsOnFloor": 5
     }
   }
 ]

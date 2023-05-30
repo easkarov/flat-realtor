@@ -19,7 +19,6 @@ import java.util.Map;
 public class CommandManager {
     private final Map<String, Command> commands = new HashMap<>();
     private final CollectionManager collectionManager;
-    private final AuthManager authManager;
 
     public CommandManager(CollectionManager collection, IOProvider provider, AuthManager authManager) {
         register("info", new InfoCommand(provider, collection));
@@ -36,11 +35,11 @@ public class CommandManager {
         register("print_unique_house", new PrintUniqueHouseCommand(provider, collection));
         register("sign_up", new SignUpCommand(provider, collection, authManager));
         register("login", new LoginCommand(provider, collection, authManager));
-        this.authManager = authManager;
+        register("logout", new LogoutCommand(provider, collection, authManager));
         this.collectionManager = collection;
     }
 
-    public List<CommandDTO> getCommands() {
+    public List<CommandDTO> getCommandsDTO() {
         return commands.entrySet()
                 .stream()
                 .map(c -> new CommandDTO(
@@ -52,6 +51,10 @@ public class CommandManager {
                 .toList();
     }
 
+    public Command getCommand(String command) {
+        return commands.get(command);
+    }
+
     public void register(String commandName, Command command) {
         commands.put(commandName, command);
     }
@@ -61,9 +64,6 @@ public class CommandManager {
             if (commands.containsKey(request.name())) {
                 collectionManager.update();
                 var command = commands.get(request.name());
-                if (command instanceof Authorized) {
-                    var username = AuthManager.getUsername(request.token());
-                }
                 var response = command.execute(request);
                 collectionManager.dump();
                 return response;
@@ -76,8 +76,8 @@ public class CommandManager {
 
     public Response validate(ValidationRequest request) {
         try {
-            if (commands.containsKey(request.commandName())) {
-                var command = commands.get(request.commandName());
+            if (commands.containsKey(request.name())) {
+                var command = commands.get(request.name());
                 command.validateArgs(request.args());
             }
             return new ValidationResponse("OK", StatusCode.OK);

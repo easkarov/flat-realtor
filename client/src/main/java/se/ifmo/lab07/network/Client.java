@@ -59,6 +59,7 @@ public class Client implements AutoCloseable {
     }
 
     public void send(Request request) throws IOException {
+        request.setToken(token);
         var byteStream = new ByteArrayOutputStream();
         var objectStream = new ObjectOutputStream(byteStream);
         objectStream.writeObject(request);

@@ -15,7 +15,6 @@ public class FlatRepository implements Repository<Flat> {
 
     private static final String USER = "postgres";
 
-
     private static final String PASSWORD = "password";
 
     private static final String UPDATE_SQL = """
@@ -77,12 +76,14 @@ public class FlatRepository implements Repository<Flat> {
                 statement.setString(6, flat.furnish() == null ? null : flat.furnish().name());
                 statement.setString(7, flat.view().name());
                 statement.setString(8, flat.transport() == null ? null : flat.transport().name());
-                statement.setInt(9, flat.house().id());
-                statement.setInt(10, flat.owner().id());
-                statement.executeUpdate();
+
                 // saving nested objects
-                userRepository.save(flat.owner());
-                houseRepository.save(flat.house());
+                var owner = userRepository.save(flat.owner());
+                var house = houseRepository.save(flat.house());
+
+                statement.setInt(9, house.id());
+                statement.setInt(10, owner.id());
+                statement.executeUpdate();
 
                 connection.commit();
 
@@ -98,12 +99,13 @@ public class FlatRepository implements Repository<Flat> {
             statement.setString(6, flat.furnish() == null ? null : flat.furnish().name());
             statement.setString(7, flat.view().name());
             statement.setString(8, flat.transport() == null ? null : flat.transport().name());
-            statement.setInt(9, flat.house().id());
             statement.setLong(10, flat.id());
             statement.executeUpdate();
             // saving nested objects
-            userRepository.save(flat.owner());
-            houseRepository.save(flat.house());
+            var owner = userRepository.save(flat.owner());
+            var house = houseRepository.save(flat.house());
+
+            statement.setInt(9, house.id());
 
             connection.commit();
 

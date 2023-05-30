@@ -16,6 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -26,32 +27,28 @@ public class AuthManager {
 
     private static final int BLOCKLIST_CLEARING_DELAY = 10_000;
 
-    private static final long TOKEN_EXPIRATION_SECOND_TIME = 60 * 2;
+    private static final long TOKEN_EXPIRATION_SECOND_TIME = 10;
 
     private static final String TOKEN_SECRET = "generated_for_training_purposes";
 
     private static final Algorithm ALGORITHM = Algorithm.HMAC512(TOKEN_SECRET);
 
-    private final ConcurrentMap<Instant, String> blocklist = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, Instant> blocklist = new ConcurrentHashMap<>();
 
     private final UserRepository userRepository = new UserRepository();
-
-//    public AuthManager(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
 
     public void register(String username, String password) {
         var salt = UUID.randomUUID().toString();
         try {
+            if (userRepository.findByUsername(username).isPresent()) {
+                throw new AuthorizationException("User already exists");
+            }
             var hash = SecurityManager.generateHash(password, salt);
             var user = new User(username, hash, salt);
             userRepository.save(user);
         } catch (NoSuchAlgorithmException | SQLException e) {
             logger.error(e.toString());
-            if (e instanceof SQLException) {
-                logger.error(((SQLException) e).getSQLState());
-            }
-            throw new RegisterException("Something went wrong while registration");
+            throw new AuthorizationException("Something went wrong while registration");
         }
     }
 
@@ -72,26 +69,48 @@ public class AuthManager {
     }
 
     public void logout(String token) {
-        blocklist.put(getExpirationTime(token), token);
+        if (token != null) {
+            var expTime = getExpirationTime(token);
+            expTime.ifPresent(instant -> blocklist.put(token, instant));
+        }
     }
 
     private void clearBlocklist() {
-        for (var instant : blocklist.keySet()) {
-            if (instant.isBefore(Instant.now())) {
-                blocklist.remove(instant);
+        for (var key : blocklist.keySet()) {
+            if (blocklist.get(key).isBefore(Instant.now())) {
+                blocklist.remove(key);
             }
         }
     }
 
-    public static Instant getExpirationTime(String token) {
-        return getClaim(token, "exp", Date.class).toInstant();
+    public static Optional<Instant> getExpirationTime(String token) {
+        try {
+            return Optional.of(getClaim(token, "exp", Date.class).toInstant());
+        } catch (AuthorizationException e) {
+            return Optional.empty();
+        }
+
     }
 
-    public static String getUsername(String token) {
-        return getClaim(token, "username", String.class);
+    public Optional<String> getUsername(String token) {
+        if (token == null) {
+            return Optional.empty();
+        }
+        try {
+            checkBlockList(token);
+            return Optional.of(getClaim(token, "username", String.class));
+        } catch (AuthorizationException ignored) {
+            return Optional.empty();
+        }
     }
 
-    public static <T> T getClaim(String token, String claim, Class<T> clazz) {
+    private void checkBlockList(String token) {
+        if (blocklist.containsKey(token)) {
+            throw new AuthorizationException("Token has been blocked");
+        }
+    }
+
+    private static <T> T getClaim(String token, String claim, Class<T> clazz) {
         try {
             DecodedJWT jwt = JWT.require(ALGORITHM)
                     .build()
