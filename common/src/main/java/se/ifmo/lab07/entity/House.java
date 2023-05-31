@@ -1,18 +1,19 @@
-package se.ifmo.lab07.model;
+package se.ifmo.lab07.entity;
 
-import java.io.Serializable;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
+
 import java.util.Objects;
 
-public class House implements Serializable {
-    private String name; //Поле не может быть null
-    private Long year; //Максимальное значение поля: 636, Значение поля должно быть больше 0
-    private int numberOfFlatsOnFloor; //Значение поля должно быть больше 0
 
-    public House(String name, Long year, int numberOfFlatsOnFloor) {
-        this.name = name;
-        this.year = year;
-        this.numberOfFlatsOnFloor = numberOfFlatsOnFloor;
-    }
+@Data
+@Accessors(fluent = true, chain = true)
+public class House {
+    private Integer id;
+    private String name;
+    private Long year;
+    private int numberOfFlatsOnFloor;
 
     public static boolean validateName(String name) {
         return (name != null);
@@ -52,9 +53,4 @@ public class House implements Serializable {
                 year.equals(house.year);
     }
 
-    @Override
-    public String toString() {
-        return String.format("---- Name: %s\n---- Year: %s\n---- Number of Flats On Floor: %s",
-                name, year, numberOfFlatsOnFloor);
-    }
 }

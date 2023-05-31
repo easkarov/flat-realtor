@@ -3,7 +3,7 @@ package se.ifmo.lab07.manager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
-import se.ifmo.lab07.model.Flat;
+import se.ifmo.lab07.entity.Flat;
 import se.ifmo.lab07.util.ZonedDateTimeDeserializer;
 import se.ifmo.lab07.util.ZonedDateTimeSerializer;
 

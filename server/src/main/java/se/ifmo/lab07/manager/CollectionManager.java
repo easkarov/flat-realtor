@@ -1,7 +1,6 @@
 package se.ifmo.lab07.manager;
 
-import se.ifmo.lab07.model.Flat;
-import se.ifmo.lab07.model.Furnish;
+import se.ifmo.lab07.entity.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -32,7 +31,7 @@ public class CollectionManager {
     }
 
     public void push(Flat element) {
-        if (element.validate() && get(element.getId()) == null) {
+        if (element.validate() && get(element.id()) == null) {
             collection.push(element);
         }
     }
@@ -55,7 +54,7 @@ public class CollectionManager {
     }
 
     public Flat get(long id) {
-        for (Flat flat : collection) if (flat.getId() == id) return flat;
+        for (Flat flat : collection) if (flat.id() == id) return flat;
         return null;
     }
 
@@ -87,9 +86,9 @@ public class CollectionManager {
 
     public long removeByFurnish(Furnish furnish) {
         long n = collection.stream()
-                .filter(flat -> flat.getFurnish() == furnish)
+                .filter(flat -> flat.furnish() == furnish)
                 .count();
-        collection.removeIf(flat -> flat.getFurnish() == furnish);
+        collection.removeIf(flat -> flat.furnish() == furnish);
         return n;
     }
 

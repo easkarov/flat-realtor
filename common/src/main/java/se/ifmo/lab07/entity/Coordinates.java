@@ -1,10 +1,14 @@
-package se.ifmo.lab07.model;
+package se.ifmo.lab07.entity;
 
-import java.io.Serializable;
 
-public class Coordinates implements Serializable {
-    private long x; //Значение поля должно быть больше -952
-    private Float y; //Максимальное значение поля: 779, Поле не может быть null
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+@Data
+@Accessors(fluent = true, chain = true)
+public class Coordinates {
+    private long x;
+    private Float y;
 
     public Coordinates(long x, Float y) {
         this.x = x;

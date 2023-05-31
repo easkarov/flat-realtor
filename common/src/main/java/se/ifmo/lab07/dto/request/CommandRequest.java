@@ -1,7 +1,7 @@
 package se.ifmo.lab07.dto.request;
 
 
-import se.ifmo.lab07.model.Flat;
+import se.ifmo.lab07.entity.Flat;
 
 import java.io.Serializable;
 
