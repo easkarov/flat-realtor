@@ -1,5 +1,6 @@
 package se.ifmo.lab07.command;
 
+import se.ifmo.lab07.dto.StatusCode;
 import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.util.IOProvider;
 import se.ifmo.lab07.exception.InvalidArgsException;
@@ -22,7 +23,7 @@ public class AddCommand extends Command implements Unauthorized {
 //         TODO: обработка конца файла или ввода NoSuchElementException
         collection.push(request.model());  // TODO: Perhaps ID should be returned from push
 
-        var message = "Flat (ID %s) added successfully.\n".formatted(request.model().getId());
-        return new CommandResponse(message);
+        var message = "Flat (ID %s) added successfully.\n".formatted(request.model().id());
+        return new CommandResponse(message, StatusCode.OK, request.token());
     }
 }

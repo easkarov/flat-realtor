@@ -27,9 +27,9 @@ public class SignUpCommand extends Command implements Unauthorized {
 
         try {
             authManager.register(request.args()[0], request.args()[1]);
-            return new CommandResponse("Signed up successfully");
+            return new CommandResponse("Signed up successfully", StatusCode.OK, request.token());
         } catch (AuthorizationException e) {
-            return new CommandResponse(e.getMessage(), StatusCode.ERROR);
+            return new CommandResponse(e.getMessage(), StatusCode.ERROR, request.token());
         }
     }
 

@@ -1,11 +1,12 @@
 package se.ifmo.lab07.command;
 
+import se.ifmo.lab07.dto.StatusCode;
 import se.ifmo.lab07.exception.InvalidArgsException;
 import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.dto.request.CommandRequest;
 import se.ifmo.lab07.dto.response.CommandResponse;
 import se.ifmo.lab07.dto.response.Response;
-import se.ifmo.lab07.model.Flat;
+import se.ifmo.lab07.entity.Flat;
 import se.ifmo.lab07.util.IOProvider;
 
 public class ShowCommand extends Command {
@@ -23,6 +24,6 @@ public class ShowCommand extends Command {
             builder.append(flat.toString()).append("\n");
             builder.append(line).append("\n");
         }
-        return new CommandResponse(builder.toString());
+        return new CommandResponse(builder.toString(), StatusCode.OK, request.token());
     }
 }

@@ -1,5 +1,6 @@
 package se.ifmo.lab07.command;
 
+import se.ifmo.lab07.dto.StatusCode;
 import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.util.IOProvider;
 import se.ifmo.lab07.exception.InvalidArgsException;
@@ -16,6 +17,6 @@ public class ClearCommand extends Command {
     public Response execute(CommandRequest request) throws InvalidArgsException {
         validateArgs(request.args());
         collection.clear();
-        return new CommandResponse("Collection cleared successfully.\n");
+        return new CommandResponse("Collection cleared successfully.\n", StatusCode.OK, request.token());
     }
 }

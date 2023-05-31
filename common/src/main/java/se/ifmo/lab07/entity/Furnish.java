@@ -1,4 +1,4 @@
-package se.ifmo.lab07.persistance.entity;
+package se.ifmo.lab07.entity;
 
 import java.io.Serializable;
 

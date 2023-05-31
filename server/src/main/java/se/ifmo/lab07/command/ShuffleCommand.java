@@ -1,5 +1,6 @@
 package se.ifmo.lab07.command;
 
+import se.ifmo.lab07.dto.StatusCode;
 import se.ifmo.lab07.exception.InvalidArgsException;
 import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.util.IOProvider;
@@ -16,6 +17,6 @@ public class ShuffleCommand extends Command {
     public Response execute(CommandRequest request) throws InvalidArgsException {
         validateArgs(request.args());
         collection.shuffle();
-        return new CommandResponse("Collection has been shuffled.");
+        return new CommandResponse("Collection has been shuffled.", StatusCode.OK, request.token());
     }
 }

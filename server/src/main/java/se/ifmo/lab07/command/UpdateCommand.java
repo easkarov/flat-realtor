@@ -7,7 +7,7 @@ import se.ifmo.lab07.dto.StatusCode;
 import se.ifmo.lab07.dto.request.CommandRequest;
 import se.ifmo.lab07.dto.response.CommandResponse;
 import se.ifmo.lab07.dto.response.Response;
-import se.ifmo.lab07.model.Flat;
+import se.ifmo.lab07.entity.Flat;
 
 public class UpdateCommand extends Command {
 
@@ -39,7 +39,7 @@ public class UpdateCommand extends Command {
         Flat newFlat = request.model();
         collection.update(flatId, newFlat);
         builder.append("Flat (ID %s) updated successfully.".formatted(flatId));
-        return new CommandResponse(builder.toString());
+        return new CommandResponse(builder.toString(), StatusCode.OK, request.token());
     }
 
     @Override

@@ -29,7 +29,7 @@ public class LoginCommand extends Command implements Unauthorized {
             var token = authManager.authorize(request.args()[0], request.args()[1]);
             return new CommandResponse("Logged in successfully", StatusCode.OK, token);
         } catch (AuthorizationException e) {
-            return new CommandResponse(e.getMessage(), StatusCode.ERROR);
+            return new CommandResponse(e.getMessage(), StatusCode.ERROR, request.token());
         }
     }
 

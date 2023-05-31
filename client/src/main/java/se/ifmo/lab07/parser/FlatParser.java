@@ -1,7 +1,8 @@
 package se.ifmo.lab07.parser;
 
+import se.ifmo.lab07.entity.*;
 import se.ifmo.lab07.util.Printer;
-import se.ifmo.lab07.model.*;
+
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -16,6 +17,7 @@ public class FlatParser extends DefaultParser {
         print("HOUSE:");
         // House Name
         String name;
+
         while (!House.validateName(name = parseString("Name", "not null"))) print("Invalid Name.");
         // House year
         Long year;
@@ -25,7 +27,9 @@ public class FlatParser extends DefaultParser {
         while (!House.validateFlatsNumber(flatsNumber = parseInt("Number of Flats on Floor", "not null, int, min 1"))) {
             print("Invalid Number of Flats on Floor.");
         }
-        return new House(name, year, flatsNumber);
+        return new House().name(name)
+                .year(year)
+                .numberOfFlatsOnFloor(flatsNumber);
     }
 
     public Coordinates parseCoordinates() {
@@ -75,6 +79,13 @@ public class FlatParser extends DefaultParser {
         // Flat House
         House house = parseHouse();
 
-        return new Flat(name, coordinates, area, numberOfRooms, furnish, view, transport, house);
+        return new Flat().name(name)
+                .coordinates(coordinates)
+                .area(area)
+                .numberOfRooms(numberOfRooms)
+                .furnish(furnish)
+                .view(view)
+                .transport(transport)
+                .house(house);
     }
 }

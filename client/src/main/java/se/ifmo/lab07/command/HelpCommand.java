@@ -7,7 +7,7 @@ import se.ifmo.lab07.dto.CommandDTO;
 
 import java.util.Map;
 
-public class HelpCommand extends Command {
+public class HelpCommand extends Command implements Authorized {
     private final Map<String, CommandDTO> serverCommands;
     private final Map<String, Command> clientCommands;
 

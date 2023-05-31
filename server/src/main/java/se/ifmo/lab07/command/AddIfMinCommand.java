@@ -1,5 +1,6 @@
 package se.ifmo.lab07.command;
 
+import se.ifmo.lab07.dto.StatusCode;
 import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.util.IOProvider;
 import se.ifmo.lab07.exception.InvalidArgsException;
@@ -21,14 +22,14 @@ public class AddIfMinCommand extends Command {
 
         var flat = request.model();
         var minFlat = collection.min();
-        if (minFlat.getArea() <= flat.getArea()) {
+        if (minFlat.area() <= flat.area()) {
             var message = "Flat (value: %s) not added because there is flat with less value (%s).\n".formatted(
-                    flat.getArea(), minFlat.getArea()
+                    flat.area(), minFlat.area()
             );
-            return new CommandResponse(message);
+            return new CommandResponse(message, StatusCode.OK, request.token());
         }
         collection.push(flat);
-        var message = "Flat (ID %s) added successfully.\n".formatted(flat.getId());
-        return new CommandResponse(message);
+        var message = "Flat (ID %s) added successfully.\n".formatted(flat.id());
+        return new CommandResponse(message, StatusCode.OK, request.token());
     }
 }

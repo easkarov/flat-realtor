@@ -22,10 +22,10 @@ public class RemoveByIdCommand extends Command {
 
         long flatId = Long.parseLong(request.args()[0]);
         if (collection.get(flatId) == null) {
-            return new CommandResponse("Flat with specified ID doesn't exist.", StatusCode.ERROR);
+            return new CommandResponse("Flat with specified ID doesn't exist.", StatusCode.ERROR, request.token());
         }
         collection.removeById(flatId);
-        return new CommandResponse("Flat (ID %s) removed successfully.\n".formatted(flatId));
+        return new CommandResponse("Flat (ID %s) removed successfully.\n".formatted(flatId), StatusCode.OK, request.token());
     }
 
     @Override

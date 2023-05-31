@@ -38,7 +38,6 @@ public class Main {
 //            DatabaseManager.drop();
 //            DatabaseManager.init();
             try (var server = new Server(commandManager, authManager, port)) {
-                authManager.startClearing();
                 server.run();
             }
         } catch (FileNotFoundException e) {

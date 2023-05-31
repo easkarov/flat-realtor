@@ -3,7 +3,7 @@ package se.ifmo.lab07.persistance.repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.ifmo.lab07.exception.NotFoundException;
-import se.ifmo.lab07.persistance.entity.User;
+import se.ifmo.lab07.entity.User;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;

@@ -1,7 +1,7 @@
 package se.ifmo.lab07.persistance.repository;
 
+import se.ifmo.lab07.entity.*;
 import se.ifmo.lab07.exception.NotFoundException;
-import se.ifmo.lab07.persistance.entity.*;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -143,17 +143,16 @@ public class FlatRepository implements Repository<Flat> {
         var house = houseRepository.getById(resultSet.getLong("house_id")).orElseThrow(() -> new NotFoundException("House not found"));
         var owner = userRepository.getById(resultSet.getLong("owner_id")).orElseThrow(() -> new NotFoundException("User not found"));
 
-        return new Flat(resultSet.getLong("id"),
-                resultSet.getString("name"),
-                coordinates,
-                resultSet.getObject("created_at", ZonedDateTime.class),
-                resultSet.getLong("area"),
-                resultSet.getLong("number_of_rooms"),
-                Optional.ofNullable(resultSet.getString("furnish")).map(Furnish::valueOf).orElse(null),
-                View.valueOf(resultSet.getString("view")),
-                Optional.ofNullable(resultSet.getString("transport")).map(Transport::valueOf).orElse(null),
-                house,
-                owner
-        );
+        return new Flat().id(resultSet.getLong("id"))
+                .name(resultSet.getString("name"))
+                .coordinates(coordinates)
+                .createdAt(resultSet.getObject("created_at", ZonedDateTime.class))
+                .area(resultSet.getLong("area"))
+                .numberOfRooms(resultSet.getLong("number_of_rooms"))
+                .furnish(Optional.ofNullable(resultSet.getString("furnish")).map(Furnish::valueOf).orElse(null))
+                .view(View.valueOf(resultSet.getString("view")))
+                .transport(Optional.ofNullable(resultSet.getString("transport")).map(Transport::valueOf).orElse(null))
+                .house(house)
+                .owner(owner);
     }
 }

@@ -1,5 +1,6 @@
 package se.ifmo.lab07.parser;
 
+import se.ifmo.lab07.command.Authorized;
 import se.ifmo.lab07.network.Client;
 import se.ifmo.lab07.dto.request.GetCommandsRequest;
 import se.ifmo.lab07.dto.response.GetCommandsResponse;
@@ -63,7 +64,10 @@ public class CommandParser extends DefaultParser {
                 commandManager.register(((GetCommandsResponse) response).commands());
 
                 var clientCommand = commandManager.getClientCommand(commandName);
-                if (clientCommand.isPresent()) {
+                if (clientCommand.isPresent() && clientCommand.get() instanceof Authorized && client.getToken() == null) {
+                    printer.print("Access denied. Unauthorized");
+                    continue;
+                } else if (clientCommand.isPresent()) {
                     clientCommand.get().execute(args);
                     continue;
                 }
@@ -89,9 +93,7 @@ public class CommandParser extends DefaultParser {
                 }
                 commandRequest.setToken(client.getToken());
                 var commandResponse = (CommandResponse) client.sendAndReceive(commandRequest);
-                if (commandResponse.status() == StatusCode.OK && commandResponse.token() != null) {
-                    client.setToken(commandResponse.token());
-                }
+                client.setToken(commandResponse.token());
                 printer.print(commandResponse.message());
 
             } catch (InterruptCommandException e) {

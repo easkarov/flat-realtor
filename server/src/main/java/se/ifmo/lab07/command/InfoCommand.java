@@ -1,6 +1,7 @@
 package se.ifmo.lab07.command;
 
 
+import se.ifmo.lab07.dto.StatusCode;
 import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.util.IOProvider;
 import se.ifmo.lab07.exception.InvalidArgsException;
@@ -17,6 +18,6 @@ public class InfoCommand extends Command {
     @Override
     public Response execute(CommandRequest request) throws InvalidArgsException {
         validateArgs(request.args());
-        return new CommandResponse(collection.description());
+        return new CommandResponse(collection.description(), StatusCode.OK, request.token());
     }
 }

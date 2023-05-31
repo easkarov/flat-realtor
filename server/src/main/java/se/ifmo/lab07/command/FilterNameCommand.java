@@ -1,11 +1,12 @@
 package se.ifmo.lab07.command;
 
+import se.ifmo.lab07.dto.StatusCode;
 import se.ifmo.lab07.exception.InvalidArgsException;
 import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.dto.request.CommandRequest;
 import se.ifmo.lab07.dto.response.CommandResponse;
 import se.ifmo.lab07.dto.response.Response;
-import se.ifmo.lab07.model.Flat;
+import se.ifmo.lab07.entity.Flat;
 import se.ifmo.lab07.util.IOProvider;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class FilterNameCommand extends Command {
         String name = request.args()[0];
         List<Flat> flats = collection.getCollection()
                 .stream()
-                .filter(flat -> flat.getName().toLowerCase().startsWith(name.toLowerCase()))
+                .filter(flat -> flat.name().toLowerCase().startsWith(name.toLowerCase()))
                 .toList();
 
         var builder = new StringBuilder();
@@ -37,7 +38,7 @@ public class FilterNameCommand extends Command {
             builder.append(flat.toString()).append("\n");
             builder.append(line);
         }
-        return new CommandResponse(builder.toString());
+        return new CommandResponse(builder.toString(), StatusCode.OK, request.token());
     }
 
     @Override

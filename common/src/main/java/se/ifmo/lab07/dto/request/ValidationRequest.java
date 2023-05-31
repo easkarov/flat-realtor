@@ -1,8 +1,8 @@
 package se.ifmo.lab07.dto.request;
 
 public final class ValidationRequest extends Request {
-    private String name;
-    private String[] args;
+    private final String name;
+    private final String[] args;
 
     public ValidationRequest(String name, String[] args) {
         this.name = name;

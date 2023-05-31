@@ -1,5 +1,6 @@
 package se.ifmo.lab07.command;
 
+import se.ifmo.lab07.dto.StatusCode;
 import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.util.IOProvider;
 import se.ifmo.lab07.exception.InvalidArgsException;
@@ -16,6 +17,6 @@ public class RemoveLastCommand extends Command {
     public Response execute(CommandRequest request) throws InvalidArgsException {
         validateArgs(request.args());
         collection.pop();
-        return new CommandResponse("Last collection element removed successfully.");
+        return new CommandResponse("Last collection element removed successfully.", StatusCode.OK, request.token());
     }
 }

@@ -35,7 +35,7 @@ public class CommandManager {
         register("print_unique_house", new PrintUniqueHouseCommand(provider, collection));
         register("sign_up", new SignUpCommand(provider, collection, authManager));
         register("login", new LoginCommand(provider, collection, authManager));
-        register("logout", new LogoutCommand(provider, collection, authManager));
+        register("logout", new LogoutCommand(provider, collection));
         this.collectionManager = collection;
     }
 
@@ -68,9 +68,9 @@ public class CommandManager {
                 collectionManager.dump();
                 return response;
             }
-            return new CommandResponse("Invalid command", StatusCode.ERROR);
+            return new CommandResponse("Invalid command", StatusCode.ERROR, request.token());
         } catch (InvalidArgsException e) {
-            return new CommandResponse(e.getMessage(), StatusCode.ERROR);
+            return new CommandResponse(e.getMessage(), StatusCode.ERROR, request.token());
         }
     }
 
@@ -80,9 +80,9 @@ public class CommandManager {
                 var command = commands.get(request.name());
                 command.validateArgs(request.args());
             }
-            return new ValidationResponse("OK", StatusCode.OK);
+            return new ValidationResponse("OK", StatusCode.OK, request.token());
         } catch (InvalidArgsException e) {
-            return new ValidationResponse(e.getMessage(), StatusCode.ERROR);
+            return new ValidationResponse(e.getMessage(), StatusCode.ERROR, request.token());
         }
     }
 

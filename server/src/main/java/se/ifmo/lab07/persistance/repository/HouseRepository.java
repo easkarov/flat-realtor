@@ -1,6 +1,6 @@
 package se.ifmo.lab07.persistance.repository;
 
-import se.ifmo.lab07.persistance.entity.House;
+import se.ifmo.lab07.entity.House;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -76,10 +76,10 @@ public class HouseRepository implements Repository<House> {
     }
 
     private House mapRowToEntity(ResultSet resultSet) throws SQLException {
-        return new House(resultSet.getInt("id"),
-                resultSet.getString("name"),
-                resultSet.getLong("year"),
-                resultSet.getInt("number_of_flats")
-        );
+        return new House()
+                .id(resultSet.getInt("id"))
+                .name(resultSet.getString("name"))
+                .year(resultSet.getLong("year"))
+                .numberOfFlatsOnFloor(resultSet.getInt("number_of_flats"));
     }
 }
