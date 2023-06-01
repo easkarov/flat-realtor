@@ -19,12 +19,12 @@ public class CollectionManager {
     private final Stack<Flat> collection;
     private final ZonedDateTime createdAt = ZonedDateTime.now();
 
-    private CollectionManager() {
+    CollectionManager() {
         this.collection = new Stack<>();
     }
 
     public List<Flat> getCollection() {
-        return collection;
+        return collection.stream().toList();
     }
 
     public static CollectionManager fromDatabase() {
@@ -79,9 +79,9 @@ public class CollectionManager {
     }
 
     public Flat min() {
-        return !collection.isEmpty() ? collection.stream()
+        return collection.stream()
                 .min(Flat::compareTo)
-                .get() : null;
+                .orElse(null);
     }
 
     public void shuffle() {
