@@ -1,34 +1,45 @@
 package se.ifmo.lab07.manager;
 
-import se.ifmo.lab07.entity.*;
+import se.ifmo.lab07.entity.Flat;
+import se.ifmo.lab07.entity.Furnish;
+import se.ifmo.lab07.entity.House;
+import se.ifmo.lab07.persistance.repository.FlatRepository;
+import se.ifmo.lab07.persistance.repository.HouseRepository;
+import se.ifmo.lab07.persistance.repository.UserRepository;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.sql.SQLException;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 public class CollectionManager {
     private final Stack<Flat> collection;
     private final ZonedDateTime createdAt = ZonedDateTime.now();
-    private final String fileName;
 
-    private CollectionManager(String fileName) {
+    private CollectionManager() {
         this.collection = new Stack<>();
-        this.fileName = fileName;
     }
 
     public List<Flat> getCollection() {
         return collection;
     }
 
-
-    public static CollectionManager fromFile(String fileName) throws FileNotFoundException {
-        CollectionManager collection = new CollectionManager(fileName);
-        Flat[] flats = JsonManager.fromFile(new FileReader(fileName));
-        for (Flat flat : flats) collection.push(flat);
-        return collection;
+    public static CollectionManager fromDatabase() {
+        var collection = new CollectionManager();
+        var repository = new FlatRepository(new HouseRepository(), new UserRepository());
+        try {
+            for (Flat flat : repository.findAll()) {
+                collection.push(flat);
+            }
+            return collection;
+        } catch (SQLException e) {
+            return new CollectionManager();
+        }
     }
+
 
     public void push(Flat element) {
         if (element.validate() && get(element.id()) == null) {
@@ -45,12 +56,16 @@ public class CollectionManager {
         collection.removeElement(get(id));
     }
 
-    public void clear() {
-        collection.clear();
+    public long removeByOwnerId(int id) {
+        long n = collection.stream()
+                .filter(flat -> flat.owner().id().equals(id))
+                .count();
+        collection.removeIf(flat -> flat.owner().id().equals(id));
+        return n;
     }
 
-    public void pop() {
-        if (!collection.isEmpty()) collection.pop();
+    public Flat last() {
+        return collection.isEmpty() ? null : collection.peek();
     }
 
     public Flat get(long id) {
@@ -63,17 +78,6 @@ public class CollectionManager {
                 collection.getClass().getName(), createdAt, collection.size());
     }
 
-    public void dump() throws IOException {
-        JsonManager.toFile(fileName, collection);
-    }
-
-    public void update() throws IOException {
-        try (var file = new FileReader(fileName)) {
-            this.collection.clear();
-            this.collection.addAll(List.of(JsonManager.fromFile(file)));
-        }
-    }
-
     public Flat min() {
         return !collection.isEmpty() ? collection.stream()
                 .min(Flat::compareTo)
@@ -84,12 +88,24 @@ public class CollectionManager {
         Collections.shuffle(collection);
     }
 
-    public long removeByFurnish(Furnish furnish) {
+    public long removeByFurnish(String username, Furnish furnish) {
         long n = collection.stream()
-                .filter(flat -> flat.furnish() == furnish)
+                .filter(flat -> flat.furnish() == furnish && flat.owner().username().equals(username))
                 .count();
-        collection.removeIf(flat -> flat.furnish() == furnish);
+        collection.removeIf(flat -> flat.furnish() == furnish && flat.owner().username().equals(username));
         return n;
+    }
+
+    public List<Flat> filterByName(String name) {
+        return collection.stream()
+                .filter(flat -> flat.name().toLowerCase().startsWith(name.toLowerCase()))
+                .toList();
+    }
+
+    public Set<House> getUniqueHouses() {
+        return collection.stream()
+                .map(Flat::house)
+                .collect(Collectors.toSet());
     }
 
     @Override

@@ -113,7 +113,8 @@ public class CommandParser extends DefaultParser {
             } catch (TimeLimitExceededException e) {
                 provider.getPrinter().print(e.getMessage());
             } catch (IOException e) {
-                provider.getPrinter().print("Error occurred while I/O");
+                throw new RuntimeException(e);
+//                provider.getPrinter().print("Error occurred while I/O");
             } catch (ClassNotFoundException e) {
                 provider.getPrinter().print("Invalid response format from server");
             }

@@ -1,6 +1,6 @@
 package se.ifmo.lab07.exception;
 
-public class InvalidArgsException extends Exception {
+public class InvalidArgsException extends RuntimeException {
     public InvalidArgsException(String message) {
         super(message);
     }

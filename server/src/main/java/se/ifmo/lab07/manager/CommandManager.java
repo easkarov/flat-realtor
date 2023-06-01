@@ -8,17 +8,18 @@ import se.ifmo.lab07.dto.request.ValidationRequest;
 import se.ifmo.lab07.dto.response.CommandResponse;
 import se.ifmo.lab07.dto.response.Response;
 import se.ifmo.lab07.dto.response.ValidationResponse;
+import se.ifmo.lab07.exception.AuthorizationException;
 import se.ifmo.lab07.exception.InvalidArgsException;
 import se.ifmo.lab07.util.IOProvider;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CommandManager {
     private final Map<String, Command> commands = new HashMap<>();
-    private final CollectionManager collectionManager;
 
     public CommandManager(CollectionManager collection, IOProvider provider, AuthManager authManager) {
         register("info", new InfoCommand(provider, collection));
@@ -36,7 +37,6 @@ public class CommandManager {
         register("sign_up", new SignUpCommand(provider, collection, authManager));
         register("login", new LoginCommand(provider, collection, authManager));
         register("logout", new LogoutCommand(provider, collection));
-        this.collectionManager = collection;
     }
 
     public List<CommandDTO> getCommandsDTO() {
@@ -62,15 +62,15 @@ public class CommandManager {
     public Response execute(CommandRequest request) throws IOException {
         try {
             if (commands.containsKey(request.name())) {
-                collectionManager.update();
                 var command = commands.get(request.name());
-                var response = command.execute(request);
-                collectionManager.dump();
-                return response;
+                return command.execute(request);
             }
             return new CommandResponse("Invalid command", StatusCode.ERROR, request.token());
-        } catch (InvalidArgsException e) {
+        } catch (InvalidArgsException | AuthorizationException e) {
             return new CommandResponse(e.getMessage(), StatusCode.ERROR, request.token());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+//            return new CommandResponse("Something went wrong with DB\n%s".formatted(e.getMessage()), StatusCode.ERROR, request.token());
         }
     }
 
@@ -78,7 +78,7 @@ public class CommandManager {
         try {
             if (commands.containsKey(request.name())) {
                 var command = commands.get(request.name());
-                command.validateArgs(request.args());
+                command.validateArgs(request);
             }
             return new ValidationResponse("OK", StatusCode.OK, request.token());
         } catch (InvalidArgsException e) {

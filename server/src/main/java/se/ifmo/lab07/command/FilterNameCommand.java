@@ -1,15 +1,13 @@
 package se.ifmo.lab07.command;
 
 import se.ifmo.lab07.dto.StatusCode;
-import se.ifmo.lab07.exception.InvalidArgsException;
-import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.dto.request.CommandRequest;
 import se.ifmo.lab07.dto.response.CommandResponse;
 import se.ifmo.lab07.dto.response.Response;
 import se.ifmo.lab07.entity.Flat;
+import se.ifmo.lab07.exception.InvalidArgsException;
+import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.util.IOProvider;
-
-import java.util.List;
 
 public class FilterNameCommand extends Command {
 
@@ -23,12 +21,9 @@ public class FilterNameCommand extends Command {
 
     @Override
     public Response execute(CommandRequest request) throws InvalidArgsException {
-        validateArgs(request.args());
+        validateArgs(request);
         String name = request.args()[0];
-        List<Flat> flats = collection.getCollection()
-                .stream()
-                .filter(flat -> flat.name().toLowerCase().startsWith(name.toLowerCase()))
-                .toList();
+        var flats = collection.filterByName(name);
 
         var builder = new StringBuilder();
         builder.append("Collection filtered by name:\n");

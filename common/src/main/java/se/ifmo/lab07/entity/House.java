@@ -4,12 +4,13 @@ package se.ifmo.lab07.entity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 
 @Data
 @Accessors(fluent = true, chain = true)
-public class House {
+public class House implements Serializable {
     private Integer id;
     private String name;
     private Long year;

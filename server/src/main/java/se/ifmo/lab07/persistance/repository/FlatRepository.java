@@ -6,7 +6,9 @@ import se.ifmo.lab07.exception.NotFoundException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class FlatRepository implements Repository<Flat> {
@@ -27,7 +29,8 @@ public class FlatRepository implements Repository<Flat> {
             furnish = ?,
             view = ?,
             transport = ?,
-            house_id = ?
+            house_id = ?,
+            owner_id = ?
             WHERE id = ?;
             """;
 
@@ -42,7 +45,8 @@ public class FlatRepository implements Repository<Flat> {
                 view,
                 transport,
                 house_id,
-                owner_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                owner_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                RETURNING *;
             """;
 
     private static final String FIND_BY_ID = """
@@ -51,6 +55,14 @@ public class FlatRepository implements Repository<Flat> {
 
     private static final String DELETE_BY_ID = """
             DELETE FROM flat WHERE id = ?;
+            """;
+
+    private static final String FIND_ALL = """
+            SELECT * FROM flat;
+            """;
+
+    private static final String DELETE_BY_OWNER_ID = """
+            DELETE FROM flat WHERE owner_id = ?;
             """;
 
     private final HouseRepository houseRepository;
@@ -66,7 +78,7 @@ public class FlatRepository implements Repository<Flat> {
     public Flat save(Flat flat) throws SQLException {
         try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
             connection.setAutoCommit(false);
-            if (getById(flat.id()).isEmpty()) {
+            if (findById(flat.id()).isEmpty()) {
                 var statement = connection.prepareStatement(SAVE_SQL);
                 statement.setString(1, flat.name());
                 statement.setLong(2, flat.coordinates().x());
@@ -76,18 +88,17 @@ public class FlatRepository implements Repository<Flat> {
                 statement.setString(6, flat.furnish() == null ? null : flat.furnish().name());
                 statement.setString(7, flat.view().name());
                 statement.setString(8, flat.transport() == null ? null : flat.transport().name());
-
                 // saving nested objects
                 var owner = userRepository.save(flat.owner());
                 var house = houseRepository.save(flat.house());
 
                 statement.setInt(9, house.id());
                 statement.setInt(10, owner.id());
-                statement.executeUpdate();
-
+                var rs = statement.executeQuery();
+                rs.next();
+                flat = mapRowToEntity(rs);
                 connection.commit();
-
-                return getById(flat.id()).orElseThrow(() -> new NotFoundException("Flat not found"));
+                return flat;
             }
 
             var statement = connection.prepareStatement(UPDATE_SQL);
@@ -99,13 +110,14 @@ public class FlatRepository implements Repository<Flat> {
             statement.setString(6, flat.furnish() == null ? null : flat.furnish().name());
             statement.setString(7, flat.view().name());
             statement.setString(8, flat.transport() == null ? null : flat.transport().name());
-            statement.setLong(10, flat.id());
-            statement.executeUpdate();
+            statement.setLong(11, flat.id());
             // saving nested objects
             var owner = userRepository.save(flat.owner());
             var house = houseRepository.save(flat.house());
 
             statement.setInt(9, house.id());
+            statement.setInt(10, owner.id());
+            statement.executeUpdate();
 
             connection.commit();
 
@@ -114,7 +126,29 @@ public class FlatRepository implements Repository<Flat> {
     }
 
     @Override
-    public Optional<Flat> getById(long id) throws SQLException {
+    public List<Flat> findAll() throws SQLException {
+        try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            var statement = connection.prepareStatement(FIND_ALL);
+            var resultSet = statement.executeQuery();
+            var list = new ArrayList<Flat>();
+            while (resultSet.next()) {
+                list.add(mapRowToEntity(resultSet));
+            }
+            return list;
+        }
+    }
+
+    public boolean deleteByOwnerId(long id) throws SQLException {
+        try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            var statement = connection.prepareStatement(DELETE_BY_OWNER_ID);
+            statement.setLong(1, id);
+            return statement.executeUpdate() > 0;
+        }
+    }
+
+
+    @Override
+    public Optional<Flat> findById(long id) throws SQLException {
         try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
             var statement = connection.prepareStatement(FIND_BY_ID);
             statement.setLong(1, id);
@@ -140,13 +174,13 @@ public class FlatRepository implements Repository<Flat> {
         var y = resultSet.getFloat("y_coord");
         var coordinates = new Coordinates(x, y);
 
-        var house = houseRepository.getById(resultSet.getLong("house_id")).orElseThrow(() -> new NotFoundException("House not found"));
-        var owner = userRepository.getById(resultSet.getLong("owner_id")).orElseThrow(() -> new NotFoundException("User not found"));
+        var house = houseRepository.findById(resultSet.getLong("house_id")).orElseThrow(() -> new NotFoundException("House not found"));
+        var owner = userRepository.findById(resultSet.getLong("owner_id")).orElseThrow(() -> new NotFoundException("User not found"));
 
         return new Flat().id(resultSet.getLong("id"))
                 .name(resultSet.getString("name"))
                 .coordinates(coordinates)
-                .createdAt(resultSet.getObject("created_at", ZonedDateTime.class))
+                .createdAt(resultSet.getObject("created_at", OffsetDateTime.class).toZonedDateTime())
                 .area(resultSet.getLong("area"))
                 .numberOfRooms(resultSet.getLong("number_of_rooms"))
                 .furnish(Optional.ofNullable(resultSet.getString("furnish")).map(Furnish::valueOf).orElse(null))

@@ -16,7 +16,7 @@ public class ShowCommand extends Command {
 
     @Override
     public Response execute(CommandRequest request) throws InvalidArgsException {
-        validateArgs(request.args());
+        validateArgs(request);
         var builder = new StringBuilder();
         String line = "-".repeat(60);
         builder.append(line).append("\n");

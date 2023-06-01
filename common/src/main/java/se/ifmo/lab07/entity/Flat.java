@@ -3,12 +3,13 @@ package se.ifmo.lab07.entity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 
 @Data
 @Accessors(fluent = true, chain = true)
-public class Flat implements Comparable<Flat> {
+public class Flat implements Comparable<Flat>, Serializable {
     private long id;
     private String name;
     private Coordinates coordinates;
@@ -92,7 +93,7 @@ public class Flat implements Comparable<Flat> {
     @Override
     public String toString() {
         return String.format("ID: %s\nName: %s\nCoordinates:\n%s\nCreation date: %s\nArea: %s\nNumber Of Rooms: %s\n" +
-                        "Furnish: %s\nView: %s\nTransport: %s\nHouse:\n%s",
-                id, name, coordinates, createdAt, area, numberOfRooms, furnish, view, transport, house);
+                        "Furnish: %s\nView: %s\nTransport: %s\nHouse: %s\nOwner: %s",
+                id, name, coordinates, createdAt, area, numberOfRooms, furnish, view, transport, house, owner);
     }
 }

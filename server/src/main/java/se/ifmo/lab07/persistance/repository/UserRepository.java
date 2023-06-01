@@ -2,12 +2,14 @@ package se.ifmo.lab07.persistance.repository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.ifmo.lab07.exception.NotFoundException;
 import se.ifmo.lab07.entity.User;
+import se.ifmo.lab07.exception.NotFoundException;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class UserRepository implements Repository<User> {
@@ -40,6 +42,10 @@ public class UserRepository implements Repository<User> {
             DELETE FROM "user" WHERE id = ?;
             """;
 
+    private static final String FIND_ALL = """
+            SELECT * FROM "user";
+            """;
+
     @Override
     public User save(User user) throws SQLException {
         try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
@@ -48,7 +54,6 @@ public class UserRepository implements Repository<User> {
                 statement.setString(1, user.username());
                 statement.setString(2, user.password());
                 statement.setString(3, user.salt());
-                logger.error(statement.toString());
                 statement.executeUpdate();
 
                 return findByUsername(user.username()).orElseThrow(() -> new NotFoundException("User not found"));
@@ -63,7 +68,7 @@ public class UserRepository implements Repository<User> {
     }
 
     @Override
-    public Optional<User> getById(long id) throws SQLException {
+    public Optional<User> findById(long id) throws SQLException {
         try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
             var statement = connection.prepareStatement(FIND_BY_ID);
             statement.setLong(1, id);
@@ -76,6 +81,19 @@ public class UserRepository implements Repository<User> {
     }
 
     @Override
+    public List<User> findAll() throws SQLException {
+        try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            var statement = connection.prepareStatement(FIND_ALL);
+            var resultSet = statement.executeQuery();
+            var list = new ArrayList<User>();
+            while (resultSet.next()) {
+                list.add(mapRowToEntity(resultSet));
+            }
+            return list;
+        }
+    }
+
+    @Override
     public boolean deleteById(long id) throws SQLException {
         try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
             var statement = connection.prepareStatement(DELETE_BY_ID);
@@ -84,7 +102,7 @@ public class UserRepository implements Repository<User> {
         }
     }
 
-    public Optional<User> findByUsername(String username) throws SQLException {
+    public Optional<User> findByUsername(String username) {
         try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
             var statement = connection.prepareStatement(FIND_BY_USERNAME);
             statement.setString(1, username);
@@ -93,6 +111,9 @@ public class UserRepository implements Repository<User> {
                 return Optional.empty();
             }
             return Optional.of(mapRowToEntity(resultSet));
+        } catch (SQLException e) {
+            logger.error(e.toString());
+            return Optional.empty();
         }
     }
 

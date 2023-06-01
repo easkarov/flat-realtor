@@ -23,7 +23,7 @@ public class SignUpCommand extends Command implements Unauthorized {
 
     @Override
     public Response execute(CommandRequest request) throws InvalidArgsException {
-        validateArgs(request.args());
+        validateArgs(request);
 
         try {
             authManager.register(request.args()[0], request.args()[1]);

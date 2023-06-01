@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 
 @Getter
 @Setter
-@Accessors(fluent = true)
-public class User {
+@Accessors(fluent = true, chain = true)
+public class User implements Serializable {
 
     private Integer id;
     private final String username;
@@ -26,5 +28,11 @@ public class User {
         this.salt = salt;
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "User(id=%s, username=%s)".formatted(id, username);
+    }
+
 }
 

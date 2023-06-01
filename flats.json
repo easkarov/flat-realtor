@@ -6,7 +6,6 @@
       "x": 999,
       "y": 700.0
     },
-    "creationDate": "2023-02-17T14:58:53.428316200+03:00[Europe/Moscow]",
     "area": 5,
     "numberOfRooms": 5,
     "furnish": "NONE",
@@ -25,7 +24,6 @@
       "x": 234,
       "y": 3.0
     },
-    "creationDate": "2023-03-09T22:32:43.898262300+03:00[Europe/Moscow]",
     "area": 34,
     "numberOfRooms": 34,
     "furnish": "NONE",
@@ -44,7 +42,6 @@
       "x": 1,
       "y": 111.0
     },
-    "creationDate": "2023-03-09T14:58:53.428316200+03:00[Europe/Moscow]",
     "area": 222,
     "numberOfRooms": 5,
     "furnish": "BAD",

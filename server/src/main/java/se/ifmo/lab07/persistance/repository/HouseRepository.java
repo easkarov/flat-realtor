@@ -5,6 +5,8 @@ import se.ifmo.lab07.entity.House;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class HouseRepository implements Repository<House> {
@@ -20,9 +22,8 @@ public class HouseRepository implements Repository<House> {
             """;
 
     private static final String SAVE_SQL = """
-            WITH h AS (INSERT INTO house(name, year, number_of_flats) values (?, ?, ?)
-            RETURNING id, name, year, number_of_flats)
-            SELECT * FROM h;
+            INSERT INTO house(name, year, number_of_flats) values (?, ?, ?)
+            RETURNING id, name, year, number_of_flats;
             """;
 
     private static final String FIND_BY_ID = """
@@ -33,6 +34,10 @@ public class HouseRepository implements Repository<House> {
             DELETE FROM house WHERE id = ?;
             """;
 
+    private static final String FIND_ALL = """
+            SELECT * FROM house;
+            """;
+
     @Override
     public House save(House house) throws SQLException {
         try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
@@ -41,7 +46,9 @@ public class HouseRepository implements Repository<House> {
                 statement.setString(1, house.name());
                 statement.setLong(2, house.year());
                 statement.setInt(3, house.numberOfFlatsOnFloor());
-                return mapRowToEntity(statement.executeQuery());
+                var rs = statement.executeQuery();
+                rs.next();
+                return mapRowToEntity(rs);
             }
             var statement = connection.prepareStatement(UPDATE_SQL);
             statement.setString(1, house.name());
@@ -54,7 +61,7 @@ public class HouseRepository implements Repository<House> {
     }
 
     @Override
-    public Optional<House> getById(long id) throws SQLException {
+    public Optional<House> findById(long id) throws SQLException {
         try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
             var statement = connection.prepareStatement(FIND_BY_ID);
             statement.setLong(1, id);
@@ -63,6 +70,19 @@ public class HouseRepository implements Repository<House> {
                 return Optional.empty();
             }
             return Optional.of(mapRowToEntity(resultSet));
+        }
+    }
+
+    @Override
+    public List<House> findAll() throws SQLException {
+        try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            var statement = connection.prepareStatement(FIND_ALL);
+            var resultSet = statement.executeQuery();
+            var list = new ArrayList<House>();
+            while (resultSet.next()) {
+                list.add(mapRowToEntity(resultSet));
+            }
+            return list;
         }
     }
 

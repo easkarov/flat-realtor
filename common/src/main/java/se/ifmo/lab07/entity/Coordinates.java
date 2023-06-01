@@ -4,9 +4,11 @@ package se.ifmo.lab07.entity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 @Data
 @Accessors(fluent = true, chain = true)
-public class Coordinates {
+public class Coordinates implements Serializable {
     private long x;
     private Float y;
 

@@ -50,7 +50,7 @@ public class AuthManager {
             return JWT.create()
                     .withClaim("username", username)
                     .sign(ALGORITHM);
-        } catch (SQLException | NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             logger.error(e.toString());
             throw new AuthorizationException("Something went wrong while authorization");
         }
@@ -62,7 +62,8 @@ public class AuthManager {
         }
         try {
             return Optional.of(getClaim(token, "username", String.class));
-        } catch (AuthorizationException ignored) {
+        } catch (AuthorizationException e) {
+            logger.error(e.toString());
             return Optional.empty();
         }
     }

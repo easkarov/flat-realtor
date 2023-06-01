@@ -1,16 +1,10 @@
 BEGIN;
 
-CREATE TYPE furnish AS ENUM ('NONE', 'BAD', 'LITTLE');
-
-CREATE TYPE view AS ENUM ('STREET', 'YARD', 'BAD', 'TERRIBLE');
-
-CREATE TYPE transport AS ENUM ('NONE', 'LITTLE', 'ENOUGH');
-
 CREATE TABLE IF NOT EXISTS house
 (
-    id               serial,
-    name             text   NOT NULL,
-    year             bigint NOT NULL CHECK ( year > 0 ),
+    id              serial,
+    name            text   NOT NULL,
+    year            bigint NOT NULL CHECK ( year > 0 ),
     number_of_flats int    NOT NULL CHECK ( number_of_flats > 0 ),
     PRIMARY KEY (id)
 );
@@ -30,12 +24,12 @@ CREATE TABLE IF NOT EXISTS flat
     name            text      NOT NULL,
     x_coord         bigint    NOT NULL,
     y_coord         numeric   NOT NULL,
-    created_at      timestamp NOT NULL DEFAULT now(),
+    created_at      timestamptz NOT NULL DEFAULT now(),
     area            bigint    NOT NULL CHECK ( area > 0 ),
     number_of_rooms bigint    NOT NULL CHECK ( number_of_rooms > 0 ),
-    furnish         furnish   NOT NULL,
-    view            view      NOT NULL,
-    transport       transport NOT NULL,
+    furnish         text,
+    view            text      NOT NULL,
+    transport       text,
     house_id        int       NOT NULL UNIQUE,
     owner_id        int       NOT NULL UNIQUE,
     PRIMARY KEY (id),

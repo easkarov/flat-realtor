@@ -5,6 +5,11 @@ import java.io.Serializable;
 
 public sealed abstract class Request implements Serializable permits CommandRequest, GetCommandsRequest, PingRequest, ValidationRequest {
     private String token;
+    private final String[] args;
+
+    public Request(String[] args) {
+        this.args = args;
+    }
 
     public void setToken(String token) {
         this.token = token;
@@ -14,4 +19,7 @@ public sealed abstract class Request implements Serializable permits CommandRequ
         return token;
     }
 
+    public String[] args() {
+        return args;
+    }
 }

@@ -20,9 +20,12 @@ public class RemoveByFurnishCommand extends Command {
 
     @Override
     public Response execute(CommandRequest request) throws InvalidArgsException {
-        validateArgs(request.args());
+        validateArgs(request);
+
         Furnish furnish = Furnish.valueOf(request.args()[0]);
-        long n = collection.removeByFurnish(furnish);
+        var user = getUserByRequest(request);
+
+        long n = collection.removeByFurnish(user.username(), furnish);
         return new CommandResponse("%s flats with Furnish [%s] removed successfully.\n".formatted(n, furnish), StatusCode.OK, request.token());
     }
 

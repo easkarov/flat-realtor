@@ -82,9 +82,10 @@ public class Server implements AutoCloseable {
                     sendingManager.send(address, commandManager.validate(validationRequest));
                 }
             } catch (IOException e) {
-                logger.error("Error occurred while I/O.\n{}", e.getMessage());
+                throw new RuntimeException(e);
+//                logger.error("Error occurred while I/O.\n{}", e.getMessage());
             } catch (ClassNotFoundException e) {
-                logger.error("Error. Invalid response format from server");
+                logger.error("Error. Invalid response format from client");
             }
         }
     }

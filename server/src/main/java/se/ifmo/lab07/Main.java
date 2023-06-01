@@ -23,7 +23,6 @@ public class Main {
         try (var stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("server.properties")) {
             Properties props = new Properties();
             props.load(stream);
-            var filename = props.getProperty("FILENAME");
 //            var port = Integer.parseInt(args[0]);
             var port = Integer.parseInt(props.getProperty("PORT"));
 
@@ -32,7 +31,7 @@ public class Main {
             IOProvider provider = new IOProvider(scanner, printer);
 
             AuthManager authManager = new AuthManager();
-            CollectionManager collectionManager = CollectionManager.fromFile(filename);
+            CollectionManager collectionManager = CollectionManager.fromDatabase();
             CommandManager commandManager = new CommandManager(collectionManager, provider, authManager);
 
 //            DatabaseManager.drop();

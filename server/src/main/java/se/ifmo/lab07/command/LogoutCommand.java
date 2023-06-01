@@ -15,7 +15,7 @@ public class LogoutCommand extends Command implements Unauthorized {
 
     @Override
     public Response execute(CommandRequest request) throws InvalidArgsException {
-        validateArgs(request.args());
+        validateArgs(request);
 
         return new CommandResponse("Logged out successfully");
     }
