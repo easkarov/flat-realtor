@@ -1,5 +1,6 @@
 package se.ifmo.lab07.command;
 
+import se.ifmo.lab07.dto.Role;
 import se.ifmo.lab07.network.Client;
 import se.ifmo.lab07.exception.InvalidArgsException;
 import se.ifmo.lab07.util.IOProvider;
@@ -15,7 +16,7 @@ public class HelpCommand extends Command implements Authorized {
                        Client client,
                        Map<String, Command> clientCommands,
                        Map<String, CommandDTO> serverCommands) {
-        super("help", "вывести справку по доступным командам", provider, client);
+        super("help", "вывести справку по доступным командам", provider, client, Role.MIN_USER);
         this.serverCommands = serverCommands;
         this.clientCommands = clientCommands;
     }

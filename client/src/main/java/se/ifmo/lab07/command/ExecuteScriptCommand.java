@@ -1,8 +1,9 @@
 package se.ifmo.lab07.command;
 
-import se.ifmo.lab07.network.Client;
+import se.ifmo.lab07.dto.Role;
 import se.ifmo.lab07.exception.InvalidArgsException;
 import se.ifmo.lab07.manager.CommandManager;
+import se.ifmo.lab07.network.Client;
 import se.ifmo.lab07.parser.CommandParser;
 import se.ifmo.lab07.util.IOProvider;
 
@@ -17,7 +18,7 @@ public class ExecuteScriptCommand extends Command implements Authorized {
 
     private final int recDepth;
     public ExecuteScriptCommand(IOProvider provider, Client client, int recDepth) {
-        super("execute_script {file_name}", "считать и исполнить скрипт из указанного файла", provider, client);
+        super("execute_script {file_name}", "считать и исполнить скрипт из указанного файла", provider, client, Role.MIDDLE_USER);
         this.recDepth = recDepth;
     }
 

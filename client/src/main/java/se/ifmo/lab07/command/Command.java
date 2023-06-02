@@ -1,9 +1,10 @@
 package se.ifmo.lab07.command;
 
-import se.ifmo.lab07.network.Client;
+import se.ifmo.lab07.dto.Role;
 import se.ifmo.lab07.exception.InvalidArgsException;
-import se.ifmo.lab07.util.IOProvider;
+import se.ifmo.lab07.network.Client;
 import se.ifmo.lab07.util.ArgumentValidator;
+import se.ifmo.lab07.util.IOProvider;
 
 public abstract class Command {
     private static final Class<?>[] ARGS = new Class<?>[]{};
@@ -12,12 +13,14 @@ public abstract class Command {
     String description;
     IOProvider provider;
     Client client;
+    Role role;
 
-    public Command(String name, String description, IOProvider provider, Client client) {
+    public Command(String name, String description, IOProvider provider, Client client, Role role) {
         this.name = name;
         this.description = description;
         this.provider = provider;
         this.client = client;
+        this.role = role;
     }
 
     public abstract void execute(String[] args) throws InvalidArgsException;
@@ -34,6 +37,10 @@ public abstract class Command {
         if (!ArgumentValidator.validate(getArgumentTypes(), args)) {
             throw new InvalidArgsException();
         }
+    }
+
+    public Role getRole() {
+        return role;
     }
 
     public Class<?>[] getArgumentTypes() {

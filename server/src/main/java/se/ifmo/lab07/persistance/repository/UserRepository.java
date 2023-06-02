@@ -2,6 +2,7 @@ package se.ifmo.lab07.persistance.repository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.ifmo.lab07.dto.Role;
 import se.ifmo.lab07.entity.User;
 import se.ifmo.lab07.exception.NotFoundException;
 
@@ -23,11 +24,11 @@ public class UserRepository implements Repository<User> {
     private static final String PASSWORD = "password";
 
     private static final String UPDATE_SQL = """
-            UPDATE "user" SET username = ?, password = ? WHERE id = ?;
+            UPDATE "user" SET username = ?, password = ?, role = ? WHERE id = ?;
             """;
 
     private static final String SAVE_SQL = """
-            INSERT INTO "user"(username, password, salt) values (?, ?, ?);
+            INSERT INTO "user"(username, password, salt, role) values (?, ?, ?, ?);
             """;
 
     private static final String FIND_BY_USERNAME = """
@@ -54,6 +55,7 @@ public class UserRepository implements Repository<User> {
                 statement.setString(1, user.username());
                 statement.setString(2, user.password());
                 statement.setString(3, user.salt());
+                statement.setString(4, user.role().name());
                 statement.executeUpdate();
 
                 return findByUsername(user.username()).orElseThrow(() -> new NotFoundException("User not found"));
@@ -61,14 +63,15 @@ public class UserRepository implements Repository<User> {
             var statement = connection.prepareStatement(UPDATE_SQL);
             statement.setString(1, user.username());
             statement.setString(2, user.password());
-            statement.setInt(3, user.id());
+            statement.setString(3, user.role().name());
+            statement.setInt(4, user.id());
             statement.executeUpdate();
             return user;
         }
     }
 
     @Override
-    public Optional<User> findById(long id) throws SQLException {
+    public Optional<User> findById(long id) {
         try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
             var statement = connection.prepareStatement(FIND_BY_ID);
             statement.setLong(1, id);
@@ -77,6 +80,9 @@ public class UserRepository implements Repository<User> {
                 return Optional.empty();
             }
             return Optional.of(mapRowToEntity(resultSet));
+        } catch (SQLException e) {
+            logger.error(e.toString());
+            return Optional.empty();
         }
     }
 
@@ -121,7 +127,8 @@ public class UserRepository implements Repository<User> {
         return new User(resultSet.getInt("id"),
                 resultSet.getString("username"),
                 resultSet.getString("password"),
-                resultSet.getString("salt")
+                resultSet.getString("salt"),
+                Role.valueOf(resultSet.getString("role"))
         );
     }
 }

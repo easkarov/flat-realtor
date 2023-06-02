@@ -1,19 +1,10 @@
 package se.ifmo.lab07.parser;
 
-import se.ifmo.lab07.command.Authorized;
-import se.ifmo.lab07.dto.StatusCode;
-import se.ifmo.lab07.dto.request.CommandRequest;
 import se.ifmo.lab07.dto.request.GetCommandsRequest;
-import se.ifmo.lab07.dto.request.ValidationRequest;
-import se.ifmo.lab07.dto.response.CommandResponse;
 import se.ifmo.lab07.dto.response.GetCommandsResponse;
-import se.ifmo.lab07.dto.response.ValidationResponse;
-import se.ifmo.lab07.exception.InterruptCommandException;
-import se.ifmo.lab07.exception.InvalidArgsException;
-import se.ifmo.lab07.exception.RecursionException;
+import se.ifmo.lab07.exception.*;
 import se.ifmo.lab07.manager.CommandManager;
 import se.ifmo.lab07.network.Client;
-import se.ifmo.lab07.util.ArgumentValidator;
 import se.ifmo.lab07.util.IOProvider;
 import se.ifmo.lab07.util.Printer;
 
@@ -45,11 +36,9 @@ public class CommandParser extends DefaultParser {
     public void run() {
         Scanner scanner = provider.getScanner();
         Printer printer = provider.getPrinter();
-
         if (recDepth > maxRecDepth) {
             throw new RecursionException();
         }
-
         while (true) {
             try {
                 printer.printf("\nEnter command:\n");
@@ -62,51 +51,25 @@ public class CommandParser extends DefaultParser {
                 var response = client.sendAndReceive(new GetCommandsRequest());
                 commandManager.register(((GetCommandsResponse) response).commands());
 
-                var clientCommand = commandManager.getClientCommand(commandName);
-                if (clientCommand.isPresent() && clientCommand.get() instanceof Authorized && client.credentials() == null) {
-                    printer.print("Access denied. Unauthorized");
-                    continue;
-                } else if (clientCommand.isPresent()) {
-                    clientCommand.get().execute(args);
-                    continue;
+                if (commandManager.getClientCommand(commandName).isPresent()) {
+                    commandManager.executeClientCommand(commandName, args);
                 }
                 var serverCommand = commandManager.getServerCommand(commandName);
                 if (serverCommand.isEmpty()) {
                     printer.print("Invalid command");
                     continue;
                 }
-                if (!ArgumentValidator.validate(serverCommand.get().args(), args)) {
-                    printer.print("Invalid arguments");
-                    continue;
-                }
-                var validateRequest = new ValidationRequest(serverCommand.get().name(), args);
-                var validateResponse = (ValidationResponse) client.sendAndReceive(validateRequest);
-
-                if (validateResponse.status() != StatusCode.OK) {
-                    printer.print(validateResponse.message());
-                    continue;
-                }
-                var commandRequest = new CommandRequest(serverCommand.get().name(), args);
-                if (serverCommand.get().modelRequired()) {
-                    commandRequest.setModel(new FlatParser(scanner, printer).parseFlat());
-                }
-                commandRequest.setCredentials(client.credentials());
-                var commandResponse = (CommandResponse) client.sendAndReceive(commandRequest);
-                client.setCredentials(commandResponse.credentials());
-                printer.print(commandResponse.message());
-
+                commandManager.executeServerCommand(commandName, args);
             } catch (InterruptCommandException e) {
                 printer.print("\nExited\n");
             } catch (NoSuchElementException e) {
                 printer.print("EOF");
                 break;
-            } catch (InvalidArgsException e) {
-                printer.print("Invalid args");
+            } catch (InvalidArgsException | AuthorizationException | RoleException | TimeLimitExceededException e) {
+                printer.print(e.getMessage());
             } catch (RecursionException e) {
                 printer.print("Recursion depth exceeded!");
                 break;
-            } catch (TimeLimitExceededException e) {
-                provider.getPrinter().print(e.getMessage());
             } catch (IOException e) {
                 provider.getPrinter().printf("Error occurred while I/O\n%s\n", e.toString());
             } catch (ClassNotFoundException e) {

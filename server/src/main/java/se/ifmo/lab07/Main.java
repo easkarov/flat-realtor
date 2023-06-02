@@ -2,10 +2,7 @@ package se.ifmo.lab07;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.ifmo.lab07.manager.AuthManager;
-import se.ifmo.lab07.manager.BlockingCollectionManager;
-import se.ifmo.lab07.manager.CollectionManager;
-import se.ifmo.lab07.manager.CommandManager;
+import se.ifmo.lab07.manager.*;
 import se.ifmo.lab07.network.Server;
 import se.ifmo.lab07.persistance.DatabaseManager;
 import se.ifmo.lab07.util.CLIPrinter;
@@ -37,8 +34,8 @@ public class Main {
 
             AuthManager authManager = new AuthManager();
             CollectionManager collectionManager = BlockingCollectionManager.fromDatabase();
-            CommandManager commandManager = new CommandManager(collectionManager, provider, authManager);
-
+            RoleManager roleManager = RoleManager.create();
+            CommandManager commandManager = new CommandManager(collectionManager, provider, authManager, roleManager);
 
             try (var server = new Server(commandManager, port)) {
                 server.run();

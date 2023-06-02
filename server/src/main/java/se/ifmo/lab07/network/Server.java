@@ -64,10 +64,8 @@ public class Server implements AutoCloseable {
                 var pair = receivingManager.receiveRequest();
                 var address = pair.getKey();
                 var request = pair.getValue();
-                fixedThreadPool.submit(() -> {
-                    var response = processRequest(request);
-                    new Thread(() -> sendingManager.send(address, response)).start();
-                });
+                var response = processRequest(request);
+                sendingManager.send(address, response);
             } catch (IOException e) {
                 logger.error("Error occurred while I/O.\n{}", e.getMessage());
             } catch (ClassNotFoundException e) {
