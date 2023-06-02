@@ -1,22 +1,24 @@
 package se.ifmo.lab07.dto.request;
 
 
+import se.ifmo.lab07.dto.Credentials;
+
 import java.io.Serializable;
 
 public sealed abstract class Request implements Serializable permits CommandRequest, GetCommandsRequest, PingRequest, ValidationRequest {
-    private String token;
+    private Credentials credentials;
     private final String[] args;
 
     public Request(String[] args) {
         this.args = args;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setCredentials(Credentials credentials) {
+        this.credentials = credentials;
     }
 
-    public String token() {
-        return token;
+    public Credentials credentials() {
+        return credentials;
     }
 
     public String[] args() {

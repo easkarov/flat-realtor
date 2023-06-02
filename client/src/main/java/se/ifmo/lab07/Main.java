@@ -1,5 +1,6 @@
 package se.ifmo.lab07;
 
+import se.ifmo.lab07.exception.ExitException;
 import se.ifmo.lab07.manager.CommandManager;
 import se.ifmo.lab07.network.Client;
 import se.ifmo.lab07.parser.CommandParser;
@@ -33,6 +34,8 @@ public class Main {
                 CommandParser.setMaxRecDepth(maxRecDepth);
                 parser.run();
             }
+        } catch (ExitException e) {
+            System.out.println("Program has finished. Good luck!");
         } catch (Exception e) {
             throw new RuntimeException(e);
 //            System.out.printf("Error occurred:\n%s", e.getMessage());

@@ -1,5 +1,6 @@
 package se.ifmo.lab07.command;
 
+import se.ifmo.lab07.dto.Credentials;
 import se.ifmo.lab07.dto.StatusCode;
 import se.ifmo.lab07.dto.request.CommandRequest;
 import se.ifmo.lab07.dto.response.CommandResponse;
@@ -24,8 +25,11 @@ public class LoginCommand extends Command implements Unauthorized {
     public Response execute(CommandRequest request) throws InvalidArgsException {
         validateArgs(request);
 
-        var token = authManager.authorize(request.args()[0], request.args()[1]);
-        return new CommandResponse("Logged in successfully", StatusCode.OK, token);
+        var username = request.args()[0];
+        var password = request.args()[1];
+        authManager.authorize(username, password);
+        var credentials = new Credentials(username, password);
+        return new CommandResponse("Logged in successfully", StatusCode.OK, credentials);
     }
 
     @Override

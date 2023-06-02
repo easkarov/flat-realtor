@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS flat
     view            text      NOT NULL,
     transport       text,
     house_id        int       NOT NULL UNIQUE,
-    owner_id        int       NOT NULL UNIQUE,
+    owner_id        int       NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (house_id) REFERENCES house (id),
     FOREIGN KEY (owner_id) REFERENCES "user" (id)

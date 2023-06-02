@@ -24,6 +24,6 @@ public class ShowCommand extends Command {
             builder.append(flat.toString()).append("\n");
             builder.append(line).append("\n");
         }
-        return new CommandResponse(builder.toString(), StatusCode.OK, request.token());
+        return new CommandResponse(builder.toString(), StatusCode.OK, request.credentials());
     }
 }

@@ -49,7 +49,7 @@ public class UpdateCommand extends Command {
 
         collection.update(flatId, flat);
 
-        return new CommandResponse("Flat (ID %s) updated successfully.".formatted(flatId), StatusCode.OK, request.token());
+        return new CommandResponse("Flat (ID %s) updated successfully.".formatted(flatId), StatusCode.OK, request.credentials());
     }
 
     @Override

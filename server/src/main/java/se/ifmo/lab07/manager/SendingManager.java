@@ -34,11 +34,16 @@ public class SendingManager {
         }
     }
 
-    public void send(SocketAddress address, Response response) throws IOException {
-        var byteStream = new ByteArrayOutputStream();
-        var objectStream = new ObjectOutputStream(byteStream);
-        objectStream.writeObject(response);
-        send(address, byteStream.toByteArray());
-        logger.info("Response <{}> sent to {}", response.getClass().getSimpleName(), address);
+    public void send(SocketAddress address, Response response) {
+        try {
+            var byteStream = new ByteArrayOutputStream();
+            var objectStream = new ObjectOutputStream(byteStream);
+            objectStream.writeObject(response);
+            send(address, byteStream.toByteArray());
+            logger.info("Response <{}> sent to {}", response.getClass().getSimpleName(), address);
+        } catch (IOException e) {
+            logger.error("Error occurred while I/O.\n{}", e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }

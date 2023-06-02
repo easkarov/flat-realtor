@@ -3,9 +3,11 @@ package se.ifmo.lab07;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.ifmo.lab07.manager.AuthManager;
+import se.ifmo.lab07.manager.BlockingCollectionManager;
 import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.manager.CommandManager;
 import se.ifmo.lab07.network.Server;
+import se.ifmo.lab07.persistance.DatabaseManager;
 import se.ifmo.lab07.util.CLIPrinter;
 import se.ifmo.lab07.util.IOProvider;
 import se.ifmo.lab07.util.Printer;
@@ -26,17 +28,19 @@ public class Main {
 //            var port = Integer.parseInt(args[0]);
             var port = Integer.parseInt(props.getProperty("PORT"));
 
+            DatabaseManager.drop();
+            DatabaseManager.init();
+
             Scanner scanner = new Scanner(System.in);
             Printer printer = new CLIPrinter();
             IOProvider provider = new IOProvider(scanner, printer);
 
             AuthManager authManager = new AuthManager();
-            CollectionManager collectionManager = CollectionManager.fromDatabase();
+            CollectionManager collectionManager = BlockingCollectionManager.fromDatabase();
             CommandManager commandManager = new CommandManager(collectionManager, provider, authManager);
 
-//            DatabaseManager.drop();
-//            DatabaseManager.init();
-            try (var server = new Server(commandManager, authManager, port)) {
+
+            try (var server = new Server(commandManager, port)) {
                 server.run();
             }
         } catch (FileNotFoundException e) {

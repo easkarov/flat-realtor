@@ -1,2 +1,1200 @@
-shuffle
-execute_script script.txt
+add
+test 0
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 0
+12
+12
+add
+test 1
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 1
+12
+12
+add
+test 2
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 2
+12
+12
+add
+test 3
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 3
+12
+12
+add
+test 4
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 4
+12
+12
+add
+test 5
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 5
+12
+12
+add
+test 6
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 6
+12
+12
+add
+test 7
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 7
+12
+12
+add
+test 8
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 8
+12
+12
+add
+test 9
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 9
+12
+12
+add
+test 10
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 10
+12
+12
+add
+test 11
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 11
+12
+12
+add
+test 12
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 12
+12
+12
+add
+test 13
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 13
+12
+12
+add
+test 14
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 14
+12
+12
+add
+test 15
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 15
+12
+12
+add
+test 16
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 16
+12
+12
+add
+test 17
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 17
+12
+12
+add
+test 18
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 18
+12
+12
+add
+test 19
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 19
+12
+12
+add
+test 20
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 20
+12
+12
+add
+test 21
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 21
+12
+12
+add
+test 22
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 22
+12
+12
+add
+test 23
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 23
+12
+12
+add
+test 24
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 24
+12
+12
+add
+test 25
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 25
+12
+12
+add
+test 26
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 26
+12
+12
+add
+test 27
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 27
+12
+12
+add
+test 28
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 28
+12
+12
+add
+test 29
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 29
+12
+12
+add
+test 30
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 30
+12
+12
+add
+test 31
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 31
+12
+12
+add
+test 32
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 32
+12
+12
+add
+test 33
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 33
+12
+12
+add
+test 34
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 34
+12
+12
+add
+test 35
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 35
+12
+12
+add
+test 36
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 36
+12
+12
+add
+test 37
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 37
+12
+12
+add
+test 38
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 38
+12
+12
+add
+test 39
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 39
+12
+12
+add
+test 40
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 40
+12
+12
+add
+test 41
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 41
+12
+12
+add
+test 42
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 42
+12
+12
+add
+test 43
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 43
+12
+12
+add
+test 44
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 44
+12
+12
+add
+test 45
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 45
+12
+12
+add
+test 46
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 46
+12
+12
+add
+test 47
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 47
+12
+12
+add
+test 48
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 48
+12
+12
+add
+test 49
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 49
+12
+12
+add
+test 50
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 50
+12
+12
+add
+test 51
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 51
+12
+12
+add
+test 52
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 52
+12
+12
+add
+test 53
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 53
+12
+12
+add
+test 54
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 54
+12
+12
+add
+test 55
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 55
+12
+12
+add
+test 56
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 56
+12
+12
+add
+test 57
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 57
+12
+12
+add
+test 58
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 58
+12
+12
+add
+test 59
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 59
+12
+12
+add
+test 60
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 60
+12
+12
+add
+test 61
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 61
+12
+12
+add
+test 62
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 62
+12
+12
+add
+test 63
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 63
+12
+12
+add
+test 64
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 64
+12
+12
+add
+test 65
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 65
+12
+12
+add
+test 66
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 66
+12
+12
+add
+test 67
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 67
+12
+12
+add
+test 68
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 68
+12
+12
+add
+test 69
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 69
+12
+12
+add
+test 70
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 70
+12
+12
+add
+test 71
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 71
+12
+12
+add
+test 72
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 72
+12
+12
+add
+test 73
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 73
+12
+12
+add
+test 74
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 74
+12
+12
+add
+test 75
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 75
+12
+12
+add
+test 76
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 76
+12
+12
+add
+test 77
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 77
+12
+12
+add
+test 78
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 78
+12
+12
+add
+test 79
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 79
+12
+12
+add
+test 80
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 80
+12
+12
+add
+test 81
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 81
+12
+12
+add
+test 82
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 82
+12
+12
+add
+test 83
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 83
+12
+12
+add
+test 84
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 84
+12
+12
+add
+test 85
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 85
+12
+12
+add
+test 86
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 86
+12
+12
+add
+test 87
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 87
+12
+12
+add
+test 88
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 88
+12
+12
+add
+test 89
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 89
+12
+12
+add
+test 90
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 90
+12
+12
+add
+test 91
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 91
+12
+12
+add
+test 92
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 92
+12
+12
+add
+test 93
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 93
+12
+12
+add
+test 94
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 94
+12
+12
+add
+test 95
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 95
+12
+12
+add
+test 96
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 96
+12
+12
+add
+test 97
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 97
+12
+12
+add
+test 98
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 98
+12
+12
+add
+test 99
+12
+12
+12
+12
+NONE
+YARD
+LITTLE
+test 99
+12
+12

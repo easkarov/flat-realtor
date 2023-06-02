@@ -33,7 +33,7 @@ public class FilterNameCommand extends Command {
             builder.append(flat.toString()).append("\n");
             builder.append(line);
         }
-        return new CommandResponse(builder.toString(), StatusCode.OK, request.token());
+        return new CommandResponse(builder.toString(), StatusCode.OK, request.credentials());
     }
 
     @Override

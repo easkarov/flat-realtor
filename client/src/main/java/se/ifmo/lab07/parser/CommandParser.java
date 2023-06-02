@@ -1,22 +1,21 @@
 package se.ifmo.lab07.parser;
 
 import se.ifmo.lab07.command.Authorized;
-import se.ifmo.lab07.network.Client;
-import se.ifmo.lab07.dto.request.GetCommandsRequest;
-import se.ifmo.lab07.dto.response.GetCommandsResponse;
-import se.ifmo.lab07.manager.CommandManager;
-import se.ifmo.lab07.util.IOProvider;
-import se.ifmo.lab07.util.Printer;
-import se.ifmo.lab07.util.ArgumentValidator;
 import se.ifmo.lab07.dto.StatusCode;
 import se.ifmo.lab07.dto.request.CommandRequest;
+import se.ifmo.lab07.dto.request.GetCommandsRequest;
 import se.ifmo.lab07.dto.request.ValidationRequest;
 import se.ifmo.lab07.dto.response.CommandResponse;
+import se.ifmo.lab07.dto.response.GetCommandsResponse;
 import se.ifmo.lab07.dto.response.ValidationResponse;
-import se.ifmo.lab07.exception.ExitException;
 import se.ifmo.lab07.exception.InterruptCommandException;
 import se.ifmo.lab07.exception.InvalidArgsException;
 import se.ifmo.lab07.exception.RecursionException;
+import se.ifmo.lab07.manager.CommandManager;
+import se.ifmo.lab07.network.Client;
+import se.ifmo.lab07.util.ArgumentValidator;
+import se.ifmo.lab07.util.IOProvider;
+import se.ifmo.lab07.util.Printer;
 
 import javax.naming.TimeLimitExceededException;
 import java.io.IOException;
@@ -64,7 +63,7 @@ public class CommandParser extends DefaultParser {
                 commandManager.register(((GetCommandsResponse) response).commands());
 
                 var clientCommand = commandManager.getClientCommand(commandName);
-                if (clientCommand.isPresent() && clientCommand.get() instanceof Authorized && client.getToken() == null) {
+                if (clientCommand.isPresent() && clientCommand.get() instanceof Authorized && client.credentials() == null) {
                     printer.print("Access denied. Unauthorized");
                     continue;
                 } else if (clientCommand.isPresent()) {
@@ -91,9 +90,9 @@ public class CommandParser extends DefaultParser {
                 if (serverCommand.get().modelRequired()) {
                     commandRequest.setModel(new FlatParser(scanner, printer).parseFlat());
                 }
-                commandRequest.setToken(client.getToken());
+                commandRequest.setCredentials(client.credentials());
                 var commandResponse = (CommandResponse) client.sendAndReceive(commandRequest);
-                client.setToken(commandResponse.token());
+                client.setCredentials(commandResponse.credentials());
                 printer.print(commandResponse.message());
 
             } catch (InterruptCommandException e) {
@@ -106,15 +105,10 @@ public class CommandParser extends DefaultParser {
             } catch (RecursionException e) {
                 printer.print("Recursion depth exceeded!");
                 break;
-            } catch (ExitException e) {
-                provider.closeScanner();
-                provider.getPrinter().print("Program has finished. Good luck!");
-                break;
             } catch (TimeLimitExceededException e) {
                 provider.getPrinter().print(e.getMessage());
             } catch (IOException e) {
-                throw new RuntimeException(e);
-//                provider.getPrinter().print("Error occurred while I/O");
+                provider.getPrinter().printf("Error occurred while I/O\n%s\n", e.toString());
             } catch (ClassNotFoundException e) {
                 provider.getPrinter().print("Invalid response format from server");
             }

@@ -20,6 +20,6 @@ public class ClearCommand extends Command {
         var user = getUserByRequest(request);
         flatRepository.deleteByOwnerId(user.id());
         long n = collection.removeByOwnerId(user.id());
-        return new CommandResponse("All your %s flats cleared successfully.\n".formatted(n), StatusCode.OK, request.token());
+        return new CommandResponse("All your %s flats cleared successfully.\n".formatted(n), StatusCode.OK, request.credentials());
     }
 }

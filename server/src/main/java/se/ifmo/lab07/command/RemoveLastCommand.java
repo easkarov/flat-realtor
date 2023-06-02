@@ -38,12 +38,12 @@ public class RemoveLastCommand extends Command {
         var flat = collection.last();
 
         if (!flat.owner().username().equals(user.username())) {
-            return new CommandResponse("You can't remove flats you don't own", StatusCode.ERROR, request.token());
+            return new CommandResponse("You can't remove flats you don't own", StatusCode.ERROR, request.credentials());
         }
 
         flatRepository.deleteById(flat.id());
         collection.removeById(flat.id());
 
-        return new CommandResponse("Last flat removed successfully.", StatusCode.OK, request.token());
+        return new CommandResponse("Last flat removed successfully.", StatusCode.OK, request.credentials());
     }
 }

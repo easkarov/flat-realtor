@@ -26,7 +26,7 @@ public class RemoveByFurnishCommand extends Command {
         var user = getUserByRequest(request);
 
         long n = collection.removeByFurnish(user.username(), furnish);
-        return new CommandResponse("%s flats with Furnish [%s] removed successfully.\n".formatted(n, furnish), StatusCode.OK, request.token());
+        return new CommandResponse("%s flats with Furnish [%s] removed successfully.\n".formatted(n, furnish), StatusCode.OK, request.credentials());
     }
 
     @Override

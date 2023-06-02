@@ -1,18 +1,17 @@
 package se.ifmo.lab07.command;
 
+import se.ifmo.lab07.dto.request.CommandRequest;
 import se.ifmo.lab07.dto.request.Request;
+import se.ifmo.lab07.dto.response.Response;
 import se.ifmo.lab07.entity.User;
 import se.ifmo.lab07.exception.AuthorizationException;
-import se.ifmo.lab07.manager.AuthManager;
+import se.ifmo.lab07.exception.InvalidArgsException;
 import se.ifmo.lab07.manager.CollectionManager;
 import se.ifmo.lab07.persistance.repository.FlatRepository;
 import se.ifmo.lab07.persistance.repository.HouseRepository;
 import se.ifmo.lab07.persistance.repository.UserRepository;
-import se.ifmo.lab07.util.IOProvider;
-import se.ifmo.lab07.exception.InvalidArgsException;
 import se.ifmo.lab07.util.ArgumentValidator;
-import se.ifmo.lab07.dto.request.CommandRequest;
-import se.ifmo.lab07.dto.response.Response;
+import se.ifmo.lab07.util.IOProvider;
 
 import java.sql.SQLException;
 
@@ -27,7 +26,6 @@ public abstract class Command {
     boolean requiresModel;
     UserRepository userRepository;
     FlatRepository flatRepository;
-    AuthManager authManager;
 
     public Command(String name, String description, IOProvider provider, CollectionManager collection) {
         this.name = name;
@@ -37,7 +35,6 @@ public abstract class Command {
         this.requiresModel = false;
         this.userRepository = new UserRepository();
         this.flatRepository = new FlatRepository(new HouseRepository(), userRepository);
-        this.authManager = new AuthManager();
     }
 
     public abstract Response execute(CommandRequest args) throws SQLException;
@@ -65,7 +62,6 @@ public abstract class Command {
     }
 
     User getUserByRequest(Request request) {
-        var username = authManager.getUsername(request.token()).orElseThrow(() -> new AuthorizationException("Access denied"));
-        return userRepository.findByUsername(username).orElseThrow(() -> new AuthorizationException("Access denied"));
+        return userRepository.findByUsername(request.credentials().username()).orElseThrow(() -> new AuthorizationException("Access denied"));
     }
 }

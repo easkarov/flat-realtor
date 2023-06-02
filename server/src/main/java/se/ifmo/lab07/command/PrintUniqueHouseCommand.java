@@ -28,6 +28,6 @@ public class PrintUniqueHouseCommand extends Command {
             builder.append(house.toString()).append("\n");
             builder.append(line).append("\n");
         }
-        return new CommandResponse(builder.toString(), StatusCode.OK, request.token());
+        return new CommandResponse(builder.toString(), StatusCode.OK, request.credentials());
     }
 }

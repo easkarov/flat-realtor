@@ -30,11 +30,11 @@ public class AddIfMinCommand extends Command {
             var message = "Flat (value: %s) not added because there is flat with less value (%s).\n".formatted(
                     flat.area(), minFlat.area()
             );
-            return new CommandResponse(message, StatusCode.OK, request.token());
+            return new CommandResponse(message, StatusCode.OK, request.credentials());
         }
         flat = flatRepository.save(request.model());
         collection.push(flat);
         var message = "Flat (ID %s) added successfully.\n".formatted(flat.id());
-        return new CommandResponse(message, StatusCode.OK, request.token());
+        return new CommandResponse(message, StatusCode.OK, request.credentials());
     }
 }

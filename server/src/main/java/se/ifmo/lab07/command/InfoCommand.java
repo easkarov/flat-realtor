@@ -18,6 +18,6 @@ public class InfoCommand extends Command {
     @Override
     public Response execute(CommandRequest request) throws InvalidArgsException {
         validateArgs(request);
-        return new CommandResponse(collection.description(), StatusCode.OK, request.token());
+        return new CommandResponse(collection.description(), StatusCode.OK, request.credentials());
     }
 }

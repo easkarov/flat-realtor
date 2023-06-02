@@ -23,11 +23,9 @@ public class RemoveByIdCommand extends Command {
     public void validateArgs(Request request) throws InvalidArgsException {
         super.validateArgs(request);
         long id = Long.parseLong(request.args()[0]);
-
         if (collection.get(id) == null) {
             throw new InvalidArgsException("Flat with specified ID doesn't exist");
         }
-
         var user = getUserByRequest(request);
         if (!collection.get(id).owner().username().equals(user.username())) {
             throw new InvalidArgsException("You can't remove flats you don't own");
@@ -43,7 +41,7 @@ public class RemoveByIdCommand extends Command {
         flatRepository.deleteById(flatId);
         collection.removeById(flatId);
 
-        return new CommandResponse("Flat (ID %s) removed successfully.\n".formatted(flatId), StatusCode.OK, request.token());
+        return new CommandResponse("Flat (ID %s) removed successfully.\n".formatted(flatId), StatusCode.OK, request.credentials());
     }
 
     @Override

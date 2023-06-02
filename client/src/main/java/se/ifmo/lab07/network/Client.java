@@ -2,6 +2,7 @@ package se.ifmo.lab07.network;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.ifmo.lab07.dto.Credentials;
 import se.ifmo.lab07.dto.request.Request;
 import se.ifmo.lab07.dto.response.Response;
 
@@ -25,7 +26,7 @@ public class Client implements AutoCloseable {
 
     private final InetSocketAddress address;
 
-    private String token;
+    private Credentials credentials;
 
 
     private Client(DatagramChannel connection, InetSocketAddress address) {
@@ -39,12 +40,12 @@ public class Client implements AutoCloseable {
         return new Client(dc, new InetSocketAddress(host, port));
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setCredentials(Credentials credentials) {
+        this.credentials = credentials;
     }
 
-    public String getToken() {
-        return token;
+    public Credentials credentials() {
+        return credentials;
     }
 
     public void send(byte[] data) throws IOException {
@@ -59,7 +60,7 @@ public class Client implements AutoCloseable {
     }
 
     public void send(Request request) throws IOException {
-        request.setToken(token);
+        request.setCredentials(credentials);
         var byteStream = new ByteArrayOutputStream();
         var objectStream = new ObjectOutputStream(byteStream);
         objectStream.writeObject(request);

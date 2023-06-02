@@ -17,6 +17,6 @@ public class ShuffleCommand extends Command {
     public Response execute(CommandRequest request) throws InvalidArgsException {
         validateArgs(request);
         collection.shuffle();
-        return new CommandResponse("Collection has been shuffled.", StatusCode.OK, request.token());
+        return new CommandResponse("Collection has been shuffled.", StatusCode.OK, request.credentials());
     }
 }
