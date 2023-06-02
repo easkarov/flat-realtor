@@ -27,8 +27,8 @@ public class SignUpCommand extends Command implements Unauthorized {
 
         var username = request.args()[0];
         var password = request.args()[1];
-        authManager.register(username, password);
-        var credentials = new Credentials(username, password);
+        var user = authManager.register(username, password);
+        var credentials = new Credentials(username, password, user.role());
         return new CommandResponse("Signed up successfully", StatusCode.OK, credentials);
     }
 

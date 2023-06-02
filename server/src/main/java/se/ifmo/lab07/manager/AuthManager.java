@@ -18,7 +18,7 @@ public class AuthManager {
 
     private final UserRepository userRepository = new UserRepository();
 
-    public void register(String username, String password) {
+    public User register(String username, String password) {
         var salt = UUID.randomUUID().toString();
         try {
             if (userRepository.findByUsername(username).isPresent()) {
@@ -26,29 +26,30 @@ public class AuthManager {
             }
             var hash = SecurityManager.generateHash(password, salt);
             var user = new User(username, hash, salt);
-            userRepository.save(user);
+            return userRepository.save(user);
         } catch (NoSuchAlgorithmException | SQLException e) {
             logger.error(e.toString());
             throw new AuthorizationException("Something went wrong while registration");
         }
     }
 
-    public void authorize(String username, String password) {
+    public User authorize(String username, String password) {
         try {
             var user = userRepository.findByUsername(username).orElseThrow(() -> new AuthorizationException("Username not found"));
-            if (!SecurityManager.checkPasswordHash(user.password(), password, user.salt())) {
+            if (!SecurityManager.checkPasswordHash(userRepository.findByUsername(username).orElseThrow(() -> new AuthorizationException("Username not found")).password(), password, userRepository.findByUsername(username).orElseThrow(() -> new AuthorizationException("Username not found")).salt())) {
                 throw new AuthorizationException("Invalid password");
             }
+            return user;
         } catch (NoSuchAlgorithmException e) {
             logger.error(e.toString());
             throw new AuthorizationException("Something went wrong while authorization");
         }
     }
 
-    public void authorize(Credentials credentials) {
+    public User authorize(Credentials credentials) {
         if (credentials == null) {
             throw new AuthorizationException();
         }
-        authorize(credentials.username(), credentials.password());
+        return authorize(credentials.username(), credentials.password());
     }
 }

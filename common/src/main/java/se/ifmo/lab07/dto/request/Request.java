@@ -5,7 +5,7 @@ import se.ifmo.lab07.dto.Credentials;
 
 import java.io.Serializable;
 
-public sealed abstract class Request implements Serializable permits CommandRequest, GetCommandsRequest, PingRequest, ValidationRequest {
+public sealed abstract class Request implements Serializable permits CommandRequest, GetInfoRequest, PingRequest, ValidationRequest {
     private Credentials credentials;
     private final String[] args;
 

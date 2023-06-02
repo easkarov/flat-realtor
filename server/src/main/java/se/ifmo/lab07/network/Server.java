@@ -2,15 +2,17 @@ package se.ifmo.lab07.network;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.ifmo.lab07.dto.StatusCode;
 import se.ifmo.lab07.dto.request.CommandRequest;
-import se.ifmo.lab07.dto.request.GetCommandsRequest;
+import se.ifmo.lab07.dto.request.GetInfoRequest;
 import se.ifmo.lab07.dto.request.Request;
 import se.ifmo.lab07.dto.request.ValidationRequest;
-import se.ifmo.lab07.dto.response.GetCommandsResponse;
+import se.ifmo.lab07.dto.response.GetInfoResponse;
 import se.ifmo.lab07.dto.response.PingResponse;
 import se.ifmo.lab07.dto.response.Response;
 import se.ifmo.lab07.manager.CommandManager;
 import se.ifmo.lab07.manager.ReceivingManager;
+import se.ifmo.lab07.manager.RoleManager;
 import se.ifmo.lab07.manager.SendingManager;
 
 import java.io.IOException;
@@ -30,13 +32,15 @@ public class Server implements AutoCloseable {
     private final CommandManager commandManager;
     private final ReceivingManager receivingManager;
     private final SendingManager sendingManager;
+    private final RoleManager roleManager;
     private final ExecutorService fixedThreadPool = Executors.newFixedThreadPool(PROCESSING_THREADS);
 
-    public Server(CommandManager commandManager, int port) throws SocketException {
+    public Server(CommandManager commandManager, RoleManager roleManager, int port) throws SocketException {
         this.connection = new DatagramSocket(port);
         this.commandManager = commandManager;
         this.receivingManager = new ReceivingManager(connection);
         this.sendingManager = new SendingManager(connection);
+        this.roleManager = roleManager;
         logger.info("Server started on {} port", port);
     }
 
@@ -51,8 +55,14 @@ public class Server implements AutoCloseable {
             return commandManager.execute(commandRequest);
         } else if (request instanceof ValidationRequest validationRequest) {
             return commandManager.validate(validationRequest);
-        } else if (request instanceof GetCommandsRequest) {
-            return new GetCommandsResponse(commandManager.getCommandsDTO());
+        } else if (request instanceof GetInfoRequest) {
+            if (request.credentials() == null) {
+                return new GetInfoResponse(commandManager.getCommandsDTO());
+            } else {
+                var role = roleManager.getUserRole(request.credentials().username(), request.credentials().password());
+                request.credentials().role(role);
+                return new GetInfoResponse(commandManager.getCommandsDTO(), request.credentials(), StatusCode.OK);
+            }
         } else {
             return new PingResponse();
         }
@@ -64,8 +74,10 @@ public class Server implements AutoCloseable {
                 var pair = receivingManager.receiveRequest();
                 var address = pair.getKey();
                 var request = pair.getValue();
-                var response = processRequest(request);
-                sendingManager.send(address, response);
+                fixedThreadPool.submit(() -> {
+                    var response = processRequest(request);
+                    new Thread(() -> sendingManager.send(address, response)).start();
+                });
             } catch (IOException e) {
                 logger.error("Error occurred while I/O.\n{}", e.getMessage());
             } catch (ClassNotFoundException e) {

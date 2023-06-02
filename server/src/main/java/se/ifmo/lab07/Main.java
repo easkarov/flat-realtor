@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.ifmo.lab07.manager.*;
 import se.ifmo.lab07.network.Server;
-import se.ifmo.lab07.persistance.DatabaseManager;
 import se.ifmo.lab07.util.CLIPrinter;
 import se.ifmo.lab07.util.IOProvider;
 import se.ifmo.lab07.util.Printer;
@@ -25,8 +24,8 @@ public class Main {
 //            var port = Integer.parseInt(args[0]);
             var port = Integer.parseInt(props.getProperty("PORT"));
 
-            DatabaseManager.drop();
-            DatabaseManager.init();
+//            DatabaseManager.drop();
+//            DatabaseManager.init();
 
             Scanner scanner = new Scanner(System.in);
             Printer printer = new CLIPrinter();
@@ -37,7 +36,7 @@ public class Main {
             RoleManager roleManager = RoleManager.create();
             CommandManager commandManager = new CommandManager(collectionManager, provider, authManager, roleManager);
 
-            try (var server = new Server(commandManager, port)) {
+            try (var server = new Server(commandManager, roleManager, port)) {
                 server.run();
             }
         } catch (FileNotFoundException e) {

@@ -8,7 +8,6 @@ import se.ifmo.lab07.dto.response.CommandResponse;
 import se.ifmo.lab07.dto.response.Response;
 import se.ifmo.lab07.exception.InvalidArgsException;
 import se.ifmo.lab07.manager.CollectionManager;
-import se.ifmo.lab07.manager.RoleManager;
 import se.ifmo.lab07.util.IOProvider;
 
 import java.sql.SQLException;
@@ -16,13 +15,9 @@ import java.sql.SQLException;
 public class ChangeRoleCommand extends Command {
     private static final Class<?>[] ARGS = new Class<?>[]{Integer.class, Role.class};
 
-    private final RoleManager roleManager;
-
-    public ChangeRoleCommand(IOProvider provider, CollectionManager collection, RoleManager roleManager) {
+    public ChangeRoleCommand(IOProvider provider, CollectionManager collection) {
         super("change_role {user_id} {role}", "поменять роль польвателя по id",
                 provider, collection);
-        this.requiresModel = true;
-        this.roleManager = roleManager;
     }
 
     @Override

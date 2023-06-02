@@ -2,8 +2,8 @@ package se.ifmo.lab07.manager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.ifmo.lab07.dto.Credentials;
 import se.ifmo.lab07.dto.Role;
+import se.ifmo.lab07.exception.AuthorizationException;
 import se.ifmo.lab07.exception.RoleException;
 
 import java.sql.DriverManager;
@@ -26,6 +26,8 @@ public class RoleManager {
             """;
 
     private final Map<String, Role> roles;
+
+    private final AuthManager authManager = new AuthManager();
 
     private RoleManager() {
         this.roles = new HashMap<>();
@@ -51,10 +53,18 @@ public class RoleManager {
         return manager;
     }
 
-    public void check(String command, Credentials credentials) {
-        var commandRole = this.roles.getOrDefault(command, Role.MIN_USER);
-        if (credentials == null || credentials.role() == null || credentials.role().weight() < commandRole.weight()) {
+    public void check(String command, Role role) {
+        var commandRole = this.roles.getOrDefault(command, Role.MIDDLE_USER);
+        if (role == null || role.weight() < commandRole.weight()) {
             throw new RoleException("Permission denied");
+        }
+    }
+
+    public Role getUserRole(String username, String password) {
+        try {
+            return authManager.authorize(username, password).role();
+        } catch (AuthorizationException e) {
+            return null;
         }
     }
 

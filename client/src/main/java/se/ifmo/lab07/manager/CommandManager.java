@@ -61,7 +61,7 @@ public class CommandManager {
         }
         if (clientCommand.get() instanceof Authorized) {
             if (client.credentials() == null) {
-                throw new AuthorizationException("Access denied. Unauthorized");
+                throw new AuthorizationException();
             } else if (client.credentials().role().weight() < clientCommand.get().getRole().weight()) {
                 throw new RoleException("Permission denied");
             }

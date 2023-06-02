@@ -1,7 +1,7 @@
 package se.ifmo.lab07.parser;
 
-import se.ifmo.lab07.dto.request.GetCommandsRequest;
-import se.ifmo.lab07.dto.response.GetCommandsResponse;
+import se.ifmo.lab07.dto.request.GetInfoRequest;
+import se.ifmo.lab07.dto.response.GetInfoResponse;
 import se.ifmo.lab07.exception.*;
 import se.ifmo.lab07.manager.CommandManager;
 import se.ifmo.lab07.network.Client;
@@ -48,8 +48,9 @@ public class CommandParser extends DefaultParser {
                 String[] args = Arrays.copyOfRange(splitLine, 1, splitLine.length);
 
                 commandManager.getServerCommands().clear();
-                var response = client.sendAndReceive(new GetCommandsRequest());
-                commandManager.register(((GetCommandsResponse) response).commands());
+                var response = (GetInfoResponse) client.sendAndReceive(new GetInfoRequest());
+                commandManager.register(response.commands());
+                client.setCredentials(response.credentials());
 
                 if (commandManager.getClientCommand(commandName).isPresent()) {
                     commandManager.executeClientCommand(commandName, args);

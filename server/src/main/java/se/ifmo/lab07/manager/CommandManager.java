@@ -44,7 +44,7 @@ public class CommandManager {
         register("sign_up", new SignUpCommand(provider, collection, authManager));
         register("login", new LoginCommand(provider, collection, authManager));
         register("logout", new LogoutCommand(provider, collection));
-        register("change_role", new ChangeRoleCommand(provider, collection, roleManager));
+        register("change_role", new ChangeRoleCommand(provider, collection));
         this.authManager = authManager;
         this.roleManager = roleManager;
     }
@@ -71,8 +71,8 @@ public class CommandManager {
                 return new CommandResponse("Invalid command", StatusCode.ERROR, request.credentials());
             }
             if (!(commands.get(request.name()) instanceof Unauthorized)) {
-                authManager.authorize(request.credentials());
-                roleManager.check(request.name(), request.credentials());
+                var user = authManager.authorize(request.credentials());
+                roleManager.check(request.name(), user.role());
             }
             var command = commands.get(request.name());
             return command.execute(request);
@@ -90,13 +90,12 @@ public class CommandManager {
 
     public Response validate(ValidationRequest request) {
         try {
-            logger.info("authorization... {}", request);
             if (!commands.containsKey(request.name())) {
                 return new ValidationResponse("Invalid command", StatusCode.ERROR, request.credentials());
             }
             if (!(commands.get(request.name()) instanceof Unauthorized)) {
-                authManager.authorize(request.credentials());
-                roleManager.check(request.name(), request.credentials());
+                var user = authManager.authorize(request.credentials());
+                roleManager.check(request.name(), user.role());
             }
             var command = commands.get(request.name());
             command.validateArgs(request);

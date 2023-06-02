@@ -27,8 +27,8 @@ public class LoginCommand extends Command implements Unauthorized {
 
         var username = request.args()[0];
         var password = request.args()[1];
-        authManager.authorize(username, password);
-        var credentials = new Credentials(username, password);
+        var user = authManager.authorize(username, password);
+        var credentials = new Credentials(username, password, user.role());
         return new CommandResponse("Logged in successfully", StatusCode.OK, credentials);
     }
 
