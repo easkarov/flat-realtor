@@ -1,7 +1,6 @@
 package se.ifmo.lab07.network;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import se.ifmo.lab07.Configuration;
 import se.ifmo.lab07.dto.Credentials;
 import se.ifmo.lab07.dto.request.Request;
 import se.ifmo.lab07.dto.response.Response;
@@ -15,12 +14,9 @@ import java.nio.channels.DatagramChannel;
 import java.util.Arrays;
 
 public class Client implements AutoCloseable {
+    private static final int BATCH = Configuration.BATCH;
 
-    private static final Logger logger = LoggerFactory.getLogger(Client.class);
-
-    private static final int BATCH = 1024;
-
-    private static final long MAX_DELAY = 2_000_000_000;
+    private static final long MAX_DELAY = Configuration.MAX_DELAY;
 
     private final DatagramChannel connection;
 

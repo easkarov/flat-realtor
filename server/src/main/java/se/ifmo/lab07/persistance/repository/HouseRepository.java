@@ -1,5 +1,6 @@
 package se.ifmo.lab07.persistance.repository;
 
+import se.ifmo.lab07.Configuration;
 import se.ifmo.lab07.entity.House;
 
 import java.sql.DriverManager;
@@ -11,11 +12,11 @@ import java.util.Optional;
 
 public class HouseRepository implements Repository<House> {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/lab07";
+    private static final String URL = Configuration.DB_URL;
 
-    private static final String USER = "postgres";
+    private static final String USER = Configuration.DB_USER;
 
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = Configuration.DB_PASSWORD;
 
     private static final String UPDATE_SQL = """
             UPDATE house SET name = ?, year = ?, number_of_flats = ? WHERE id = ?;

@@ -2,6 +2,7 @@ package se.ifmo.lab07.manager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.ifmo.lab07.Configuration;
 import se.ifmo.lab07.dto.response.Response;
 
 import java.io.ByteArrayOutputStream;
@@ -13,7 +14,7 @@ import java.net.SocketAddress;
 
 public class SendingManager {
     private static final Logger logger = LoggerFactory.getLogger(SendingManager.class);
-    private static final int BATCH = 1024;
+    private static final int BATCH = Configuration.BATCH;
 
     private final DatagramSocket connection;
 

@@ -2,6 +2,7 @@ package se.ifmo.lab07.network;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.ifmo.lab07.Configuration;
 import se.ifmo.lab07.dto.StatusCode;
 import se.ifmo.lab07.dto.request.CommandRequest;
 import se.ifmo.lab07.dto.request.GetInfoRequest;
@@ -26,7 +27,7 @@ public class Server implements AutoCloseable {
 
     private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
-    private static final int PROCESSING_THREADS = 8;
+    private static final int PROCESSING_THREADS = Configuration.PROCESSING_THREADS;
 
     private final DatagramSocket connection;
     private final CommandManager commandManager;
@@ -42,6 +43,9 @@ public class Server implements AutoCloseable {
         this.sendingManager = new SendingManager(connection);
         this.roleManager = roleManager;
         logger.info("Server started on {} port", port);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(connection::close));
+
     }
 
     @Override
@@ -71,17 +75,24 @@ public class Server implements AutoCloseable {
     public void run() {
         while (true) {
             try {
-                var pair = receivingManager.receiveRequest();
-                var address = pair.getKey();
-                var request = pair.getValue();
-                fixedThreadPool.submit(() -> {
-                    var response = processRequest(request);
-                    new Thread(() -> sendingManager.send(address, response)).start();
-                });
+                var pair = receivingManager.receive();
+                new Thread(() -> {
+                    try {
+                        var data = receivingManager.receiveRequest(pair);
+                        var address = data.getKey();
+                        var request = data.getValue();
+                        fixedThreadPool.submit(() -> {
+                            var response = processRequest(request);
+                            new Thread(() -> sendingManager.send(address, response)).start();
+                        });
+                    } catch (IOException e) {
+                        logger.error("Error occurred while I/O.\n{}", e.getMessage());
+                    } catch (ClassNotFoundException e) {
+                        logger.error("Error. Invalid response format from client.\n{}", e.getMessage());
+                    }
+                }).start();
             } catch (IOException e) {
                 logger.error("Error occurred while I/O.\n{}", e.getMessage());
-            } catch (ClassNotFoundException e) {
-                logger.error("Error. Invalid response format from client.\n{}", e.getMessage());
             }
         }
     }

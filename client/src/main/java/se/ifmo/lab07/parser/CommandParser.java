@@ -1,5 +1,6 @@
 package se.ifmo.lab07.parser;
 
+import se.ifmo.lab07.Configuration;
 import se.ifmo.lab07.dto.request.GetInfoRequest;
 import se.ifmo.lab07.dto.response.GetInfoResponse;
 import se.ifmo.lab07.exception.*;
@@ -18,7 +19,7 @@ public class CommandParser extends DefaultParser {
     private final CommandManager commandManager;
     private final IOProvider provider;
     private final Client client;
-    private static int maxRecDepth = 5;
+    private final static int MAX_REC_DEPTH = Configuration.MAX_REC_DEPTH;
     private final int recDepth;
 
     public CommandParser(Client client, CommandManager commandManager, IOProvider provider, int recDepth) {
@@ -29,14 +30,10 @@ public class CommandParser extends DefaultParser {
         this.client = client;
     }
 
-    public static void setMaxRecDepth(int recDepth) {
-        maxRecDepth = recDepth;
-    }
-
     public void run() {
         Scanner scanner = provider.getScanner();
         Printer printer = provider.getPrinter();
-        if (recDepth > maxRecDepth) {
+        if (recDepth > MAX_REC_DEPTH) {
             throw new RecursionException();
         }
         while (true) {
@@ -54,6 +51,7 @@ public class CommandParser extends DefaultParser {
 
                 if (commandManager.getClientCommand(commandName).isPresent()) {
                     commandManager.executeClientCommand(commandName, args);
+                    continue;
                 }
                 var serverCommand = commandManager.getServerCommand(commandName);
                 if (serverCommand.isEmpty()) {

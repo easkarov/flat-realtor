@@ -2,6 +2,7 @@ package se.ifmo.lab07.manager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.ifmo.lab07.Configuration;
 import se.ifmo.lab07.dto.Role;
 import se.ifmo.lab07.exception.AuthorizationException;
 import se.ifmo.lab07.exception.RoleException;
@@ -15,11 +16,11 @@ public class RoleManager {
 
     private static final Logger logger = LoggerFactory.getLogger(RoleManager.class);
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/lab07";
+    private static final String URL = Configuration.DB_URL;
 
-    private static final String USER = "postgres";
+    private static final String USER = Configuration.DB_USER;
 
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = Configuration.DB_PASSWORD;
 
     private static final String GET_COMMAND_ROLES = """
             SELECT * FROM command_role;

@@ -32,6 +32,7 @@ public class CollectionManager {
         var repository = new FlatRepository(new HouseRepository(), new UserRepository());
         try {
             for (Flat flat : repository.findAll()) {
+                System.out.println(flat);
                 collection.push(flat);
             }
             return collection;

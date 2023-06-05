@@ -1,5 +1,6 @@
 package se.ifmo.lab07.persistance.repository;
 
+import se.ifmo.lab07.Configuration;
 import se.ifmo.lab07.entity.*;
 import se.ifmo.lab07.exception.NotFoundException;
 
@@ -13,11 +14,11 @@ import java.util.Optional;
 
 public class FlatRepository implements Repository<Flat> {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/lab07";
+    private static final String URL = Configuration.DB_URL;
 
-    private static final String USER = "postgres";
+    private static final String USER = Configuration.DB_USER;
 
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = Configuration.DB_PASSWORD;
 
     private static final String UPDATE_SQL = """
             UPDATE flat SET

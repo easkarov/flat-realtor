@@ -1,5 +1,7 @@
 package se.ifmo.lab07.persistance;
 
+import se.ifmo.lab07.Configuration;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.DriverManager;
@@ -7,15 +9,15 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class DatabaseManager {
-    private static final String URL = "jdbc:postgresql://localhost:5432/lab07";
+    private static final String CREATE_SQL = Configuration.DB_INIT;
 
-    private static final String CREATE_SQL = "sql/create.sql";
+    private static final String DROP_SQL = Configuration.DB_DROP;
 
-    private static final String DROP_SQL = "sql/drop.sql";
+    private static final String URL = Configuration.DB_URL;
 
-    private static final String USER = "postgres";
+    private static final String USER = Configuration.DB_USER;
 
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = Configuration.DB_PASSWORD;
 
     private static void executeFromFile(String fileName) throws SQLException, IOException {
         var connection = DriverManager.getConnection(URL, USER, PASSWORD);

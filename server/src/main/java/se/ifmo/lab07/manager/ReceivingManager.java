@@ -2,6 +2,7 @@ package se.ifmo.lab07.manager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.ifmo.lab07.Configuration;
 import se.ifmo.lab07.dto.request.Request;
 
 import java.io.ByteArrayInputStream;
@@ -19,8 +20,8 @@ import static java.util.Map.Entry;
 
 public class ReceivingManager {
     private static final Logger logger = LoggerFactory.getLogger(SendingManager.class);
-    private static final int BATCH = 1024;
-    private static final int END_SIZE = 1;
+    private static final int BATCH = Configuration.BATCH;
+    private static final int END_SIZE = Configuration.END_SIZE;
 
     private final DatagramSocket connection;
     private final Map<SocketAddress, byte[]> clientData;
@@ -48,8 +49,7 @@ public class ReceivingManager {
         }
     }
 
-    public Entry<SocketAddress, Request> receiveRequest() throws IOException, ClassNotFoundException {
-        var pair = receive();
+    public Entry<SocketAddress, Request> receiveRequest(Entry<SocketAddress, byte[]> pair) throws IOException, ClassNotFoundException {
         var byteStream = new ByteArrayInputStream(pair.getValue());
         var objectStream = new ObjectInputStream(byteStream);
         var request = Map.entry(pair.getKey(), (Request) objectStream.readObject());
